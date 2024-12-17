@@ -32,7 +32,7 @@ public class Map : MonoBehaviour
 
     public bool IsInsideMap(Vector2Int position)
     {
-        return position.x < _mapSize.x && position.y < _mapSize.y && position.x > 0 && position.y > 0;
+        return position.x < _mapSize.x && position.y < _mapSize.y && position.x >= 0 && position.y >= 0;
     }
 
     public Vector3 MapToWorldPosition(Vector2Int position)
@@ -46,7 +46,7 @@ public class Map : MonoBehaviour
         _tileSize = _blankTile.GetComponent<SpriteRenderer>().bounds.size;
         Vector3 halfMapSize = new Vector3(_tileSize.x * mapSize.x / 2, _tileSize.y * _mapSize.y / 2);
 
-        for (int y = 0; y < mapSize.x; y++)
+        for (int y = 0; y < mapSize.y; y++)
         {
             for (int x = 0; x < mapSize.x; x++)
             {

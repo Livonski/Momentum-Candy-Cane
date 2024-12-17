@@ -15,5 +15,8 @@ public class TurnManagerEditor : Editor
 
         if (GUILayout.Button("Next turn"))
             script.ExecuteTurn();
+
+        if (GUILayout.Button("Next Sub-turn"))
+            script.NextSubturn();
     }
 }
