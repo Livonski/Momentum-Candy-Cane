@@ -25,6 +25,7 @@ public class Map : MonoBehaviour
         }
         Vector3 position = _map[gridPosition.x, gridPosition.y].transform.position;
         GameObject newObj = Instantiate(obj, position, Quaternion.identity);
+        _map[gridPosition.x,gridPosition.y].AddObject(newObj);
 
         IInitializable initializable = newObj.GetComponent<IInitializable>();
         initializable?.OnInitialize(gridPosition, 0);
@@ -35,9 +36,27 @@ public class Map : MonoBehaviour
         return position.x < _mapSize.x && position.y < _mapSize.y && position.x >= 0 && position.y >= 0;
     }
 
+    public bool IsEmptyTile(Vector2Int position)
+    {
+        if(!IsInsideMap(position))
+            return false;
+        return _map[position.x,position.y]._objects.Count == 0;
+    }
+
     public Vector3 MapToWorldPosition(Vector2Int position)
     {
         return _map[position.x, position.y].transform.position;
+    }
+
+    public void MoveObject(GameObject obj, Vector2Int prevPos, Vector2Int newPos)
+    {
+        if(!IsInsideMap(prevPos) || !(IsInsideMap(newPos)))
+        {
+            Debug.LogError($"Moving {obj.transform.name}, from({prevPos}) or to({newPos}) position outside of map");
+            return;
+        }
+        _map[prevPos.x,prevPos.y].RemoveObject(obj);
+        _map[newPos.x, newPos.y].AddObject(obj);
     }
 
     private void GenerateBlankMap(Vector2Int mapSize)

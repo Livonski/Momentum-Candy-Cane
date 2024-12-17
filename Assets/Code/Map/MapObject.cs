@@ -7,10 +7,23 @@ public class MapObject : MonoBehaviour, IInitializable
     public Vector2Int _gridPosition { get; private set; }
     public int ID { get; private set; }
 
+    public List<GameObject> _objects { get; private set; }
+
     public void OnInitialize(Vector2Int position, int ID)
     {
         _gridPosition = position;
         this.ID = ID;
         transform.name = "Tile " + ID;
+        _objects = new List<GameObject>();
+    }
+
+    public void AddObject(GameObject obj)
+    {
+        _objects.Add(obj);
+    }
+
+    public void RemoveObject(GameObject obj)
+    {
+        _objects.Remove(obj);
     }
 }

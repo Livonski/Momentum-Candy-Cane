@@ -18,6 +18,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         //Debug value
         _velocity = new Vector2Int(3,3);
+
         _moveQueue = new Queue<Vector2Int>();
     }
 
@@ -37,17 +38,23 @@ public class Movable : MonoBehaviour, IInitializable
         //TODO: check for collisions
         Vector2Int nextPosition = _gridPosition + _velocity;
         Debug.Log($"Executing move, next position: {nextPosition}");
-        if(_map.IsInsideMap(nextPosition))
-        {
-            _gridPosition = nextPosition;
-            transform.position = _map.MapToWorldPosition(_gridPosition);
-        }
+        MoveTo(nextPosition);
     }
 
     private void MoveTo(Vector2Int position)
     {
+        if (!_map.IsEmptyTile(position))
+        {
+            Debug.Log("Collision!");
+            _velocity = Vector2Int.zero;
+            _moveQueue.Clear();
+            return;
+            //TODO: call object that we collided with
+        }
+
         if (_map.IsInsideMap(position))
         {
+            _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;
             transform.position = _map.MapToWorldPosition(_gridPosition);
         }
