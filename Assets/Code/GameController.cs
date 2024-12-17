@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private TestObjectSpawnData[] _testObjects;
+    [SerializeField] private Map _map;
+    private void Start()
     {
-        
+        if (_map == null)
+            _map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+        _map.GenerateMap();
+        SpawnTestObjects();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SpawnTestObjects()
     {
-        
+        foreach (var data in _testObjects)
+        {
+            _map.SpawnObject(data.obj, data.position);
+        }
+    }
+
+    [System.Serializable]
+    private struct TestObjectSpawnData
+    {
+        public GameObject obj;
+        public Vector2Int position;
     }
 }

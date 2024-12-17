@@ -4,15 +4,37 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static TurnManager _instance;
+    public static TurnManager Instance
     {
-        
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<TurnManager>();
+            }
+            return _instance;
+        }
+    }
+    private List<Movable> _movables;
+
+    public void AddMovable(Movable movable)
+    {
+        _movables ??= new List<Movable>();
+        _movables.Add(movable);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ExecuteTurn()
     {
-        
+        foreach (var movable in _movables)
+        {
+            movable.Move();
+        }
+    }
+
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 }
