@@ -51,15 +51,15 @@ public class Movable : MonoBehaviour, IInitializable
         {
             if(obj.GetComponent<IBlockable>() != null)
             {
+                _collidable.OnCollision(obj);
                 blocked = true;
             }
-
-            obj.GetComponent<ICollidable>()?.OnCollision();
+            obj.GetComponent<ICollidable>()?.OnCollision(gameObject);
         }
 
         if (blocked)
         {
-            _collidable.OnCollision();
+            //_collidable.OnCollision();
             return;
         }
 

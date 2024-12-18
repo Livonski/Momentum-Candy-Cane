@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IDestroyable
 {
+    public void TakeDamage(int damage);
     public void OnRemove();
 }
