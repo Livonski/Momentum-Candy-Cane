@@ -17,8 +17,8 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    [SerializeField] bool _manualSubTurns;
-    [SerializeField] float _moveDelay;
+    [SerializeField] private bool _manualSubTurns;
+    [SerializeField] private float _moveDelay;
 
     private List<MovableData> _movables;
     private int _minMovePoints;
@@ -32,6 +32,11 @@ public class TurnManager : MonoBehaviour
         _movables ??= new List<MovableData>();
         MovableData newMovable = new MovableData(movable);
         _movables.Add(newMovable);
+    }
+
+    public float CurrentMoveDelay()
+    {
+        return _moveDelay; 
     }
 
     public void ExecuteTurnEditor()
@@ -111,6 +116,8 @@ public class TurnManager : MonoBehaviour
 
     private void DestroyObjects()
     {
+        if (_destructionQueue == null)
+            return;
         while (_destructionQueue.Count > 0)
             _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
     }

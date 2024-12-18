@@ -7,6 +7,8 @@ public class Movable : MonoBehaviour, IInitializable
 {
     public Vector2Int _gridPosition { get; private set; }
     [SerializeField] private Vector2Int _velocity;
+
+    private float _moveDelay;
     private Map _map;
     private ICollidable _collidable;
     private Queue<Vector2Int> _moveQueue;
@@ -21,6 +23,7 @@ public class Movable : MonoBehaviour, IInitializable
         _collidable = GetComponent<ICollidable>();
 
         TurnManager.Instance.AddMovable(this);
+        _moveDelay = TurnManager.Instance.CurrentMoveDelay();
 
         _moveQueue = new Queue<Vector2Int>();
     }
@@ -113,7 +116,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         while (true)
         {
-            if(x0 != _gridPosition.x && y0 != _gridPosition.y)
+            if(!(x0 == _gridPosition.x && y0 == _gridPosition.y))
             {
                 _moveQueue.Enqueue(new Vector2Int(x0, y0));
                 movePoints++;
