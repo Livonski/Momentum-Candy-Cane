@@ -9,11 +9,11 @@ public class MapObject : MonoBehaviour, IInitializable
 
     public List<GameObject> _objects { get; private set; }
 
-    public void OnInitialize(Vector2Int position, int ID)
+    public void OnInitialize(InitializationData data)
     {
-        _gridPosition = position;
-        this.ID = ID;
-        transform.name = "Tile " + ID;
+        _gridPosition = data.GridPosition;
+        ID = data.ID;
+        transform.name = data.DefaultName + ID;
         _objects = new List<GameObject>();
     }
 

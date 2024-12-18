@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
     {
         foreach (var data in _testObjects)
         {
-            _map.SpawnObject(data.obj, data.position);
+            _map.SpawnObject(data.obj, data.initializationData);
         }
     }
 
@@ -27,6 +27,6 @@ public class GameController : MonoBehaviour
     private struct TestObjectSpawnData
     {
         public GameObject obj;
-        public Vector2Int position;
+        public InitializationData initializationData;
     }
 }

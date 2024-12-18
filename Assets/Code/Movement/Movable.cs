@@ -10,14 +10,14 @@ public class Movable : MonoBehaviour, IInitializable
     private Map _map;
     private Queue<Vector2Int> _moveQueue;
 
-    public void OnInitialize(Vector2Int gridPosition, int ID)
+    public void OnInitialize(InitializationData data)
     {
-        _gridPosition = gridPosition;
+        _gridPosition = data.GridPosition;
+        _velocity = data.InitialSpeed;
+        transform.name = data.DefaultName + data.ID;
+
         _map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
         TurnManager.Instance.AddMovable(this);
-
-        //Debug value
-        _velocity = new Vector2Int(3,3);
 
         _moveQueue = new Queue<Vector2Int>();
     }

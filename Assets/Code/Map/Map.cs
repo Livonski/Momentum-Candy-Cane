@@ -16,19 +16,19 @@ public class Map : MonoBehaviour
         GenerateBlankMap(_mapSize);
     }
 
-    public void SpawnObject(GameObject obj, Vector2Int gridPosition)
+    public void SpawnObject(GameObject obj, InitializationData data)
     {
-        if(!IsInsideMap(gridPosition))
+        if(!IsInsideMap(data.GridPosition))
         {
-            Debug.Log($"{obj.transform.name} position({gridPosition}) is outside of map bounds");
+            Debug.Log($"{obj.transform.name} position({data.GridPosition}) is outside of map bounds");
             return;
         }
-        Vector3 position = _map[gridPosition.x, gridPosition.y].transform.position;
+        Vector3 position = _map[data.GridPosition.x, data.GridPosition.y].transform.position;
         GameObject newObj = Instantiate(obj, position, Quaternion.identity);
-        _map[gridPosition.x,gridPosition.y].AddObject(newObj);
+        _map[data.GridPosition.x, data.GridPosition.y].AddObject(newObj);
 
         IInitializable initializable = newObj.GetComponent<IInitializable>();
-        initializable?.OnInitialize(gridPosition, 0);
+        initializable?.OnInitialize(data);
     }
 
     public bool IsInsideMap(Vector2Int position)
@@ -72,7 +72,8 @@ public class Map : MonoBehaviour
                 Vector3 position = transform.position + new Vector3(x * _tileSize.x, y * _tileSize.y) - halfMapSize;
                 GameObject newTile = Instantiate(_blankTile, position, Quaternion.identity, transform);
                 MapObject newMapObject = newTile.GetComponent<MapObject>();
-                newMapObject.OnInitialize(new Vector2Int(x, y), y * mapSize.x + x);
+                InitializationData initializationData = new InitializationData(new Vector2Int(x, y), y * mapSize.x + x);
+                newMapObject.OnInitialize(initializationData);
 
                 _map[x, y] = newMapObject;
             }

@@ -276,11 +276,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _testObjects:
   - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
-    position: {x: 5, y: 5}
+    initializationData:
+      GridPosition: {x: 0, y: 0}
+      ID: 1
+      DefaultName: TestObj
+      InitialSpeed: {x: 3, y: 3}
   - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
-    position: {x: 0, y: 0}
+    initializationData:
+      GridPosition: {x: 5, y: 5}
+      ID: 2
+      DefaultName: TestObj
+      InitialSpeed: {x: 2, y: 2}
   - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
-    position: {x: 9, y: 9}
+    initializationData:
+      GridPosition: {x: 9, y: 9}
+      ID: 3
+      DefaultName: TestObj
+      InitialSpeed: {x: -3, y: -3}
   _map: {fileID: 1536951974}
 --- !u!4 &599510392
 Transform:
