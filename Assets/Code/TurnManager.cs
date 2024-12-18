@@ -18,10 +18,12 @@ public class TurnManager : MonoBehaviour
     }
 
     [SerializeField] bool _manualSubTurns;
+    [SerializeField] float _moveDelay;
 
     private List<MovableData> _movables;
     private int _minMovePoints;
     private int _currentSubturn;
+    private bool _processingTurn;
 
     private Queue<GameObject> _destructionQueue;
 
@@ -32,7 +34,16 @@ public class TurnManager : MonoBehaviour
         _movables.Add(newMovable);
     }
 
-    public void ExecuteTurn()
+    public void ExecuteTurnEditor()
+    {
+        if(!_processingTurn)
+        {
+            _processingTurn = true;
+            StartCoroutine(ExecuteTurn());
+        }
+    }
+
+    public IEnumerator ExecuteTurn()
     {
         _minMovePoints = int.MaxValue;
         _currentSubturn = 0;
@@ -61,7 +72,7 @@ public class TurnManager : MonoBehaviour
         }
 
         if(_manualSubTurns)
-            return;
+            yield return null;
 
         for (int i = 0; i < _minMovePoints; i++)
         {
@@ -69,9 +80,11 @@ public class TurnManager : MonoBehaviour
             foreach(var moveData in _movables)
             {
                 moveData.Movable.MoveBy(moveData.NumberOfMoves);
+                yield return new WaitForSeconds(_moveDelay);
             }
             DestroyObjects();
         }
+        _processingTurn = false;
     }
 
     public void NextSubturn()
@@ -90,16 +103,16 @@ public class TurnManager : MonoBehaviour
         DestroyObjects();
     }
 
-    private void DestroyObjects()
-    {
-        while(_destructionQueue.Count > 0)
-            _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
-    }
-
     public void EnqueueDestruction(GameObject obj)
     {
         _destructionQueue ??= new Queue<GameObject>();
         _destructionQueue.Enqueue(obj);
+    }
+
+    private void DestroyObjects()
+    {
+        while (_destructionQueue.Count > 0)
+            _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
     }
 
     private void Awake()

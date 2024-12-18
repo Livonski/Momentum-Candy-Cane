@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [CustomEditor(typeof(TurnManager))]
 public class TurnManagerEditor : Editor
@@ -14,7 +13,7 @@ public class TurnManagerEditor : Editor
         TurnManager script = (TurnManager)target;
 
         if (GUILayout.Button("Next turn"))
-            script.ExecuteTurn();
+            script.ExecuteTurnEditor();
 
         if (GUILayout.Button("Next Sub-turn"))
             script.NextSubturn();

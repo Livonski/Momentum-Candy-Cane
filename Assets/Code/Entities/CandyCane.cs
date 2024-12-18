@@ -9,6 +9,7 @@ public class CandyCane : MonoBehaviour, ICollidable, IInitializable, IDestroyabl
     {
         Debug.Log("Candy eaten");
         TurnManager.Instance.EnqueueDestruction(gameObject);
+        gameObject.SetActive(false);
     }
 
     public void OnRemove()

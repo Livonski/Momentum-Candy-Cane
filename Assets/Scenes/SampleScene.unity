@@ -351,6 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _manualSubTurns: 0
+  _moveDelay: 0.25
 --- !u!4 &835073094
 Transform:
   m_ObjectHideFlags: 0

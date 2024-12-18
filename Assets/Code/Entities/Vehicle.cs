@@ -19,7 +19,10 @@ public class Vehicle : MonoBehaviour, ICollidable, IEntity, IBlockable, IDestroy
         Debug.Log($"Collision! {transform.name}");
         _currentHP -= 1;
         if(_currentHP <= 0)
+        {
             TurnManager.Instance.EnqueueDestruction(gameObject);
+            gameObject.SetActive(false);
+        }
         _movable.Stop();
     }
 
