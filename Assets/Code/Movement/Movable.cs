@@ -8,6 +8,7 @@ public class Movable : MonoBehaviour, IInitializable
     public Vector2Int _gridPosition { get; private set; }
     [SerializeField] private Vector2Int _velocity;
     private Map _map;
+    private ICollidable _collidable;
     private Queue<Vector2Int> _moveQueue;
 
     public void OnInitialize(InitializationData data)
@@ -17,6 +18,8 @@ public class Movable : MonoBehaviour, IInitializable
         transform.name = data.DefaultName + data.ID;
 
         _map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+        _collidable = GetComponent<ICollidable>();
+
         TurnManager.Instance.AddMovable(this);
 
         _moveQueue = new Queue<Vector2Int>();
@@ -35,7 +38,6 @@ public class Movable : MonoBehaviour, IInitializable
 
     public void Move()
     {
-        //TODO: check for collisions
         Vector2Int nextPosition = _gridPosition + _velocity;
         Debug.Log($"Executing move, next position: {nextPosition}");
         MoveTo(nextPosition);
@@ -43,14 +45,24 @@ public class Movable : MonoBehaviour, IInitializable
 
     private void MoveTo(Vector2Int position)
     {
-        if (!_map.IsEmptyTile(position))
+        List<GameObject> objectsInTile = _map.GetObjectsInTile(position);
+        bool blocked = false;
+        foreach (GameObject obj in objectsInTile)
         {
-            Debug.Log("Collision!");
-            _velocity = Vector2Int.zero;
-            _moveQueue.Clear();
-            return;
-            //TODO: call object that we collided with
+            if(obj.GetComponent<IBlockable>() != null)
+            {
+                blocked = true;
+            }
+
+            obj.GetComponent<ICollidable>()?.OnCollision();
         }
+
+        if (blocked)
+        {
+            _collidable.OnCollision();
+            return;
+        }
+
 
         if (_map.IsInsideMap(position))
         {
@@ -72,6 +84,12 @@ public class Movable : MonoBehaviour, IInitializable
             MoveTo(nextPoint);
             remainingPoints--;
         }
+    }
+
+    public void Stop()
+    {
+        _velocity = Vector2Int.zero;
+        _moveQueue.Clear();
     }
 
     public int CalculateMovePoints()

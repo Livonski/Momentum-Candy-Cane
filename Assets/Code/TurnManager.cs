@@ -23,6 +23,8 @@ public class TurnManager : MonoBehaviour
     private int _minMovePoints;
     private int _currentSubturn;
 
+    private Queue<GameObject> _destructionQueue;
+
     public void AddMovable(Movable movable)
     {
         _movables ??= new List<MovableData>();
@@ -50,6 +52,8 @@ public class TurnManager : MonoBehaviour
         for(int i = 0; i < _movables.Count; i++)
         {
             int numberOfMoves = (int)Mathf.Round((float)_movables[i].MovePoints / (float)_minMovePoints);
+            if(_movables[i].MovePoints == _minMovePoints)
+                numberOfMoves = _minMovePoints;
             MovableData newMovable = _movables[i];
             newMovable.NumberOfMoves = numberOfMoves;
             _movables[i] = newMovable;
@@ -66,6 +70,7 @@ public class TurnManager : MonoBehaviour
             {
                 moveData.Movable.MoveBy(moveData.NumberOfMoves);
             }
+            DestroyObjects();
         }
     }
 
@@ -82,8 +87,20 @@ public class TurnManager : MonoBehaviour
             Debug.Log($"Executing movable, number of moves: {moveData.NumberOfMoves}");
             moveData.Movable.MoveBy(moveData.NumberOfMoves);
         }
+        DestroyObjects();
     }
 
+    private void DestroyObjects()
+    {
+        while(_destructionQueue.Count > 0)
+            _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
+    }
+
+    public void EnqueueDestruction(GameObject obj)
+    {
+        _destructionQueue ??= new Queue<GameObject>();
+        _destructionQueue.Enqueue(obj);
+    }
 
     private void Awake()
     {

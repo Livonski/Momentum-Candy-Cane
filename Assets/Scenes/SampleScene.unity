@@ -293,6 +293,18 @@ MonoBehaviour:
       ID: 3
       DefaultName: TestObj
       InitialSpeed: {x: -3, y: -3}
+  - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
+    initializationData:
+      GridPosition: {x: 6, y: 6}
+      ID: 4
+      DefaultName: Candy
+      InitialSpeed: {x: 0, y: 0}
+  - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
+    initializationData:
+      GridPosition: {x: 4, y: 4}
+      ID: 5
+      DefaultName: Candy
+      InitialSpeed: {x: 0, y: 0}
   _map: {fileID: 1536951974}
 --- !u!4 &599510392
 Transform:

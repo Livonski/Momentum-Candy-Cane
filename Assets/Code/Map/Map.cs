@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class Map : MonoBehaviour
 {
@@ -57,6 +55,31 @@ public class Map : MonoBehaviour
         }
         _map[prevPos.x,prevPos.y].RemoveObject(obj);
         _map[newPos.x, newPos.y].AddObject(obj);
+    }
+
+    public void RemoveObject(GameObject obj, Vector2Int position)
+    {
+        if(!IsInsideMap(position))
+        {
+            Debug.LogError($"Truing to remove {obj.transform.name} from map, but it's position({position}) is outside of map");
+        }
+        _map[position.x, position.y].RemoveObject(obj);
+    }
+
+    public List<GameObject> GetObjectsInTile(Vector2Int position)
+    {
+        if(!IsInsideMap(position))
+        {
+            Debug.LogError($"Trying to get objects in tile({position}) that is outside of map bounds");
+            return new List<GameObject>();
+        }
+        List<GameObject> objects = _map[position.x, position.y]._objects;
+        if (objects == null)
+        {
+            Debug.LogError($"Tile({position}) objects list is not set");
+            return new List<GameObject>();
+        }
+        return objects;
     }
 
     private void GenerateBlankMap(Vector2Int mapSize)
