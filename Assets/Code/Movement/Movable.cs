@@ -58,17 +58,19 @@ public class Movable : MonoBehaviour, IInitializable
         }
 
         if (blocked)
-        {
-            //_collidable.OnCollision();
             return;
-        }
 
 
         if (_map.IsInsideMap(position))
         {
+            StopAllCoroutines();
+            Vector3 currentPosition = transform.position;
+            Vector3 nextPosition = _map.MapToWorldPosition(position);
+
             _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;
-            transform.position = _map.MapToWorldPosition(_gridPosition);
+
+            StartCoroutine(SmoothMove(currentPosition, nextPosition, 0.25f));
         }
     }
 
@@ -136,4 +138,16 @@ public class Movable : MonoBehaviour, IInitializable
         return movePoints;
     }
 
+    private IEnumerator SmoothMove(Vector3 startPosition, Vector3 endPosition, float duration)
+    {
+        float elapsedTime = 0f;
+        while(elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = endPosition;
+    }
 }

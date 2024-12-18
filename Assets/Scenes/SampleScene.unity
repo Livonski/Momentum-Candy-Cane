@@ -289,10 +289,10 @@ MonoBehaviour:
       InitialSpeed: {x: 2, y: 2}
   - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
     initializationData:
-      GridPosition: {x: 9, y: 9}
+      GridPosition: {x: 8, y: 8}
       ID: 3
       DefaultName: TestObj
-      InitialSpeed: {x: -3, y: -3}
+      InitialSpeed: {x: 0, y: 0}
   - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
     initializationData:
       GridPosition: {x: 6, y: 6}
@@ -347,6 +347,12 @@ MonoBehaviour:
       ID: 7
       DefaultName: Wall
       InitialSpeed: {x: 0, y: 0}
+  - obj: {fileID: 5141405141847280488, guid: f148507473a09214aa49ccf4051bb5b2, type: 3}
+    initializationData:
+      GridPosition: {x: 9, y: 9}
+      ID: 7
+      DefaultName: Wall
+      InitialSpeed: {x: -1, y: -1}
   _map: {fileID: 1536951974}
 --- !u!4 &599510392
 Transform:
