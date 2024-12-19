@@ -17,5 +17,5 @@ MonoBehaviour:
   SpiritCost: 1
   Effects:
   - Type: 1
-    Value: 0
+    Value: 1
   Description: Turn left or right

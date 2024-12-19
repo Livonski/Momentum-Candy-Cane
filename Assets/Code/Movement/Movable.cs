@@ -6,6 +6,7 @@ using UnityEngine;
 public class Movable : MonoBehaviour, IInitializable
 {
     public Vector2Int _gridPosition { get; private set; }
+    public Vector2Int Forward { get; private set; }
     [SerializeField] private Vector2Int _velocity;
 
     private float _moveDelay;
@@ -26,6 +27,8 @@ public class Movable : MonoBehaviour, IInitializable
         _moveDelay = TurnManager.Instance.CurrentMoveDelay();
 
         _moveQueue = new Queue<Vector2Int>();
+
+        Forward = new Vector2Int(-1,0);
     }
 
     public void AddVelocity(Vector2Int velocity)
@@ -35,8 +38,14 @@ public class Movable : MonoBehaviour, IInitializable
             Debug.LogWarning($"Trying to add null velocity to {transform.name}");
             return;
         }
-
         _velocity += velocity;
+    }
+
+    public void AccelerateForward(int velocity)
+    {
+        Debug.Log($"Accelerating forward by {velocity}");
+        Vector2Int acceleration = Forward * velocity;
+        AddVelocity(acceleration);
     }
 
     public void Move()

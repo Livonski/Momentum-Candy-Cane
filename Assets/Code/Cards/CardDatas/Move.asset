@@ -17,5 +17,5 @@ MonoBehaviour:
   SpiritCost: 1
   Effects:
   - Type: 0
-    Value: 0
+    Value: 2
   Description: Accelerate forward by 2 tiles

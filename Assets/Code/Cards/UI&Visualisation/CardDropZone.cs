@@ -20,7 +20,7 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
     {
         if (_highlightImage != null)
         {
-            _highlightImage.color = new Color(1,1,1,0.2f);
+            _highlightImage.color = new Color(1, 1, 1, 0.2f);
             _isHighlighted = true;
         }
     }
@@ -39,9 +39,7 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         CardInteraction card = eventData.pointerDrag?.GetComponent<CardInteraction>();
         if (card != null && card.CardOwner != null && card.CardModel != null)
         {
-            bool playedCard = card.CardOwner.PlayCard(card.CardModel);
-            //card.transform.SetParent(transform, false);
-            //card.transform.localPosition = Vector3.zero;
+            card.CardOwner.PlayCard(card.CardModel);
         }
     }
 }

@@ -14,9 +14,6 @@ public class Hand : MonoBehaviour
     private List<Card> _hand;
     private CardContext _context;
 
-    //TMP stuff
-    [SerializeField] private HandView _handView;
-
     private void Start()
     {
         _hand = new List<Card>();
@@ -25,9 +22,6 @@ public class Hand : MonoBehaviour
 
         _deck = new Deck(_avaliableCards);
         _christmasSpirit = _initialChristmasSpirit;
-
-        //TMP stuff
-        _handView.Initialize(this);
     }
 
     public List<Card> GetCards()
@@ -38,7 +32,6 @@ public class Hand : MonoBehaviour
     public void DrawCard()
     {
         _hand.Add(_deck.DrawCard());
-        PrintCurrentCards();
         OnHandChanged?.Invoke(_hand);
     }
 
@@ -70,14 +63,5 @@ public class Hand : MonoBehaviour
         if (_christmasSpirit - amount < 0)
             return;
         _christmasSpirit -= amount;
-    }
-
-    private void PrintCurrentCards()
-    {
-        Debug.Log("Current cards");
-        for (int i = 0; i < _hand.Count; i++)
-        {
-            Debug.Log($"Card {i} {_hand[i].GetCardData().name}");
-        }
     }
 }

@@ -9,7 +9,7 @@ public static class CardEffectFactory
         switch(data.Type)
         {
             case EffectType.Move:
-                return new MoveEffect();
+                return new MoveEffect(data);
             case EffectType.Turn:
                 return new TurnEffect();
             default:
