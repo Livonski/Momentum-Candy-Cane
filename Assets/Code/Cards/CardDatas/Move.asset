@@ -18,3 +18,4 @@ MonoBehaviour:
   Effects:
   - Type: 0
     Value: 0
+  Description: Accelerate forward by 2 tiles

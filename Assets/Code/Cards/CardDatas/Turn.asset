@@ -18,3 +18,4 @@ MonoBehaviour:
   Effects:
   - Type: 1
     Value: 0
+  Description: Turn left or right
