@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,10 +8,14 @@ public class Hand : MonoBehaviour
     [SerializeField] private List<CardData> _avaliableCards;
     [SerializeField] private int _initialChristmasSpirit;
     public int _christmasSpirit { get; private set; }
+    public event Action<List<Card>> OnHandChanged;
 
     private Deck _deck;
     private List<Card> _hand;
     private CardContext _context;
+
+    //TMP stuff
+    [SerializeField] private HandView _handView;
 
     private void Start()
     {
@@ -22,22 +25,29 @@ public class Hand : MonoBehaviour
 
         _deck = new Deck(_avaliableCards);
         _christmasSpirit = _initialChristmasSpirit;
+
+        //TMP stuff
+        _handView.Initialize(this);
+    }
+
+    public List<Card> GetCards()
+    {
+        return _hand;
     }
 
     public void DrawCard()
     {
-        Card newCard = _deck.DrawCard();
-        _hand.Add(newCard);
-        Debug.Log("Drawn new card");
+        _hand.Add(_deck.DrawCard());
         PrintCurrentCards();
+        OnHandChanged?.Invoke(_hand);
     }
 
     public void PlayCard(int cardID)
     {
-        if(cardID > (_hand.Count - 1))
-            return;
+        if(cardID > (_hand.Count - 1)) return;
         _hand[cardID].PlayCard(_context);
         _hand.RemoveAt(cardID);
+        OnHandChanged?.Invoke(_hand);
     }
 
     public void DecreaseChristmasSpirit(int amount)
