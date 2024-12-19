@@ -39,6 +39,7 @@ public class Movable : MonoBehaviour, IInitializable
             return;
         }
         _velocity += velocity;
+        RecalculateForward();
     }
 
     public void AccelerateForward(int velocity)
@@ -46,6 +47,24 @@ public class Movable : MonoBehaviour, IInitializable
         Debug.Log($"Accelerating forward by {velocity}");
         Vector2Int acceleration = Forward * velocity;
         AddVelocity(acceleration);
+    }
+
+    public void Turn(float side)
+    {
+        //Currently it rotates object by 45 degrees which is fine but i probably need to make
+        //an option to rotate 90 degrees
+        //or snap to next 90 degree angle
+
+        if(side == 1)
+        {
+            _velocity = new Vector2Int(Forward.y, Forward.x);
+        }
+        else
+        {
+            _velocity = new Vector2Int(Forward.y, Forward.x);
+
+        }
+        Forward = _velocity;
     }
 
     public void Move()
@@ -83,6 +102,7 @@ public class Movable : MonoBehaviour, IInitializable
             _gridPosition = position;
 
             StartCoroutine(SmoothMove(currentPosition, nextPosition, 0.25f));
+            RecalculateForward();
         }
     }
 
@@ -161,5 +181,35 @@ public class Movable : MonoBehaviour, IInitializable
             yield return null;
         }
         transform.position = endPosition;
+    }
+
+    private void RecalculateForward()
+    {
+        Vector2Int[] directions =
+        {
+            new Vector2Int(0, 1),
+            new Vector2Int(1, 1),
+            new Vector2Int(1, 0),
+            new Vector2Int(1, -1),
+            new Vector2Int(0, -1),
+            new Vector2Int(-1, -1),
+            new Vector2Int(-1, 0),
+            new Vector2Int(-1, 1)
+        };
+
+        Vector2Int bestDirection = directions[0];
+        float bestScore = float.MinValue;
+
+        foreach (Vector2Int direction in directions)
+        {
+            float score = Vector2.Dot(_velocity, direction);
+            if(score > bestScore)
+            {
+                bestDirection = direction;
+                bestScore = score;
+            }
+        }
+        Forward = bestDirection;
+        Debug.Log($"{transform.name} new forward: {Forward}");
     }
 }

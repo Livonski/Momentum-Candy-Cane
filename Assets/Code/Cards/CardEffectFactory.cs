@@ -11,7 +11,7 @@ public static class CardEffectFactory
             case EffectType.Move:
                 return new MoveEffect(data);
             case EffectType.Turn:
-                return new TurnEffect();
+                return new TurnEffect(data);
             default:
                 Debug.LogWarning($"Unknown card effect {data.Type}");
                 return null;
