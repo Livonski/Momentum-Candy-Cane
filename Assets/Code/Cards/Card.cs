@@ -41,4 +41,9 @@ public class Card
             effect?.ApplyEffect(context);
         }
     }
+
+    public CardData GetCardData()
+    {
+        return _cardDataReference;
+    }
 }

@@ -29,13 +29,15 @@ public class Hand : MonoBehaviour
         Card newCard = _deck.DrawCard();
         _hand.Add(newCard);
         Debug.Log("Drawn new card");
+        PrintCurrentCards();
     }
 
     public void PlayCard(int cardID)
     {
+        if(cardID > (_hand.Count - 1))
+            return;
         _hand[cardID].PlayCard(_context);
         _hand.RemoveAt(cardID);
-        Debug.Log("Played card");
     }
 
     public void DecreaseChristmasSpirit(int amount)
@@ -43,5 +45,14 @@ public class Hand : MonoBehaviour
         if (_christmasSpirit - amount < 0)
             return;
         _christmasSpirit -= amount;
+    }
+
+    private void PrintCurrentCards()
+    {
+        Debug.Log("Current cards");
+        for (int i = 0; i < _hand.Count; i++)
+        {
+            Debug.Log($"Card {i} {_hand[i].GetCardData().name}");
+        }
     }
 }

@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class Deck
 {
-    private Queue<Card> cards = new Queue<Card>();
-
+    private Queue<Card> _cards = new Queue<Card>();
+    private List<CardData> _avaliableCards = new List<CardData>();
     public Deck(List<CardData> cardDataList)
     {
-        foreach (var data in cardDataList)
+        _avaliableCards = cardDataList;
+        AssignDeck();
+    }
+
+    private void AssignDeck()
+    {
+        _cards.Clear();
+        foreach (var data in _avaliableCards)
         {
-            cards.Enqueue(new Card(data));
+            _cards.Enqueue(new Card(data));
         }
     }
 
     public Card DrawCard()
     {
-        return cards.Count > 0 ? cards.Dequeue() : null;
+        if(_cards.Count == 0)
+            AssignDeck();
+        return _cards.Dequeue();
     }
 }
