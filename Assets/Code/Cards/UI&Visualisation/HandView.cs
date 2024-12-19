@@ -40,6 +40,9 @@ public class HandView : MonoBehaviour
             if (cardView != null)
             {
                 cardView.Setup(cards[i].GetCardData());
+                CardInteraction cardInteraction = cardGO.GetComponent<CardInteraction>();
+                cardInteraction.CardModel = cards[i];
+                cardInteraction.CardOwner = _playerHand;
             }
 
             float angle = startAngle + angleStep * i;

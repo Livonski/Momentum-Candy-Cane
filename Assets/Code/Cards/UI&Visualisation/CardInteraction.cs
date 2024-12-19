@@ -16,6 +16,9 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private RectTransform _rectTransform;
     private Canvas _canvas;
 
+    public Card CardModel;
+    public Hand CardOwner;
+
     void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
@@ -42,7 +45,6 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //TODO change rotation when beggining to drag
         _originalParent = transform.parent;
         _originalPosition = _rectTransform.anchoredPosition;
         _originalRotation = _rectTransform.rotation.eulerAngles;
@@ -76,8 +78,11 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         //TODO: check where card dropped and play card or move it to deck
         // if (overDropZone) { MoveCardToDeck(); } else { ReturnToHand(); }
 
-        _rectTransform.anchoredPosition = _originalPosition;
-        _rectTransform.rotation = Quaternion.Euler(_originalRotation);
         _canvasGroup.blocksRaycasts = true;
+        if (transform.parent == _originalParent)
+        {
+            _rectTransform.anchoredPosition = _originalPosition;
+            _rectTransform.rotation = Quaternion.Euler(_originalRotation);
+        }
     }
 }

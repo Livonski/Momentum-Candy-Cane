@@ -50,6 +50,14 @@ public class Hand : MonoBehaviour
         OnHandChanged?.Invoke(_hand);
     }
 
+    public void PlayCard(Card card)
+    {
+        if(!_hand.Contains(card)) return;
+        card.PlayCard(_context);
+        _hand.Remove(card);
+        OnHandChanged?.Invoke(_hand);
+    }
+
     public void DecreaseChristmasSpirit(int amount)
     {
         if (_christmasSpirit - amount < 0)
