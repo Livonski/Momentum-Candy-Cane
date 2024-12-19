@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,6 +9,7 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Vector3 _originalPosition;
     private Transform _originalParent;
     private int _originalSiblingIdex;
+    private Vector2 _dragOffset;
 
     private CanvasGroup _canvasGroup;
     private RectTransform _rectTransform;
@@ -44,6 +46,14 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         _canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            _canvas.transform as RectTransform,
+            eventData.position,
+            _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera,
+            out Vector2 localPoint);
+
+        _dragOffset = _rectTransform.anchoredPosition - localPoint;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -54,7 +64,7 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
             _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera,
             out Vector2 pos);
 
-        _rectTransform.anchoredPosition = pos;
+        _rectTransform.anchoredPosition = pos + _dragOffset;
     }
 
     public void OnEndDrag(PointerEventData eventData)
