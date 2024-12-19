@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Vector3 _originalPosition;
+    private Vector3 _originalRotation;
     private Transform _originalParent;
     private int _originalSiblingIdex;
     private Vector2 _dragOffset;
@@ -41,11 +42,14 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //TODO change rotation when beggining to drag
         _originalParent = transform.parent;
         _originalPosition = _rectTransform.anchoredPosition;
+        _originalRotation = _rectTransform.rotation.eulerAngles;
 
         _canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
+        _rectTransform.rotation = Quaternion.Euler(0,0,0);
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _canvas.transform as RectTransform,
@@ -73,6 +77,7 @@ public class CardInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
         // if (overDropZone) { MoveCardToDeck(); } else { ReturnToHand(); }
 
         _rectTransform.anchoredPosition = _originalPosition;
+        _rectTransform.rotation = Quaternion.Euler(_originalRotation);
         _canvasGroup.blocksRaycasts = true;
     }
 }
