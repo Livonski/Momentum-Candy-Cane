@@ -14,7 +14,7 @@ public class Hand : MonoBehaviour
     private List<Card> _hand;
     private CardContext _context;
 
-    private void Start()
+    private void Awake()
     {
         _hand = new List<Card>();
         Movable movable = GetComponent<Movable>();
@@ -63,5 +63,10 @@ public class Hand : MonoBehaviour
         if (_christmasSpirit - amount < 0)
             return;
         _christmasSpirit -= amount;
+    }
+
+    public void IncreaseChristmasSpirit(int amount)
+    {
+        _christmasSpirit += amount;
     }
 }

@@ -20,6 +20,8 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private bool _manualSubTurns;
     [SerializeField] private float _moveDelay;
 
+    private Player _player;
+
     private List<MovableData> _movables;
     private int _minMovePoints;
     private int _currentSubturn;
@@ -50,6 +52,8 @@ public class TurnManager : MonoBehaviour
 
     public IEnumerator ExecuteTurn()
     {
+        //TODO move some things into their own methods
+
         _minMovePoints = int.MaxValue;
         _currentSubturn = 0;
 
@@ -90,6 +94,8 @@ public class TurnManager : MonoBehaviour
             DestroyObjects();
         }
         _processingTurn = false;
+
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnNewTurn();
     }
 
     public void NextSubturn()

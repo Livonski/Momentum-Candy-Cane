@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    private Hand _hand;
+    [SerializeField] private Hand _hand;
+    [SerializeField] private int _christmasSpiritRegen;
+
     private HandView _handView;
     private Button _drawCardButton;
     void Start()
@@ -32,6 +34,26 @@ public class Player : MonoBehaviour
         else
         {
             Debug.LogWarning("Player: _drawCardButton is not set");
+        }
+    }
+
+    public int GetChristmasSpiritRegen()
+    {
+        return _christmasSpiritRegen;
+    }
+
+    public void OnNewTurn()
+    {
+        DrawCards(1);
+        _hand.IncreaseChristmasSpirit(_christmasSpiritRegen);
+    }
+
+    public void DrawCards(int amount)
+    {
+        _hand ??= gameObject.GetComponent<Hand>();
+        for (int i = 0; i < amount; i++) 
+        {
+            _hand.DrawCard();
         }
     }
 }

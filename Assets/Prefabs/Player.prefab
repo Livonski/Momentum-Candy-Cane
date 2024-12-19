@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1305847026606817301}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
   _avaliableCards:
   - {fileID: 11400000, guid: 1fa3cce997672c648b71ff64e04671f3, type: 2}
   - {fileID: 11400000, guid: 04604c91f3fee924a83c9a61bb5b3601, type: 2}
-  _initialChristmasSpirit: 10
+  _initialChristmasSpirit: 3
 --- !u!114 &1305847026606817301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,3 +145,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce067d925b5d911468ff5f540c3ab92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hand: {fileID: 5844267993621265547}
+  _christmasSpiritRegen: 1
