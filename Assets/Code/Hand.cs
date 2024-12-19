@@ -45,17 +45,24 @@ public class Hand : MonoBehaviour
     public void PlayCard(int cardID)
     {
         if(cardID > (_hand.Count - 1)) return;
-        _hand[cardID].PlayCard(_context);
-        _hand.RemoveAt(cardID);
-        OnHandChanged?.Invoke(_hand);
+        bool playedCard = _hand[cardID].PlayCard(_context);
+        if (playedCard)
+        {
+            _hand.RemoveAt(cardID);
+            OnHandChanged?.Invoke(_hand);
+        }
     }
 
-    public void PlayCard(Card card)
+    public bool PlayCard(Card card)
     {
-        if(!_hand.Contains(card)) return;
-        card.PlayCard(_context);
-        _hand.Remove(card);
-        OnHandChanged?.Invoke(_hand);
+        if(!_hand.Contains(card)) return false;
+        bool playedCard = card.PlayCard(_context);
+        if (playedCard)
+        {
+            _hand.Remove(card);
+            OnHandChanged?.Invoke(_hand);
+        }
+        return playedCard;
     }
 
     public void DecreaseChristmasSpirit(int amount)

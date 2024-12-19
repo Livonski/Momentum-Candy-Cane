@@ -36,14 +36,12 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Drop");
         CardInteraction card = eventData.pointerDrag?.GetComponent<CardInteraction>();
         if (card != null && card.CardOwner != null && card.CardModel != null)
         {
-            Debug.Log("Card has been dropped");
-            card.CardOwner.PlayCard(card.CardModel);
-            card.transform.SetParent(this.transform, false);
-            card.transform.localPosition = Vector3.zero;
+            bool playedCard = card.CardOwner.PlayCard(card.CardModel);
+            //card.transform.SetParent(transform, false);
+            //card.transform.localPosition = Vector3.zero;
         }
     }
 }

@@ -11,25 +11,25 @@ public class Card
         _cardDataReference = cardDataReference;
     }
 
-    public void PlayCard(CardContext context)
+    public bool PlayCard(CardContext context)
     {
         if (_cardDataReference.Effects == null)
         {
             Debug.LogWarning($"Card data is not set");
-            return;
+            return false;
         }
 
         if(_cardDataReference.Effects == null)
         {
             Debug.LogWarning($"Card effects are not set");
-            return;
+            return false;
         }
 
         if(context._hand._christmasSpirit < _cardDataReference.SpiritCost)
         {
             //TODO: show message to player?
             Debug.Log("Not enough christmas spirit to play card");
-            return;
+            return false;
         }
 
         context._hand.DecreaseChristmasSpirit(_cardDataReference.SpiritCost);
@@ -40,6 +40,7 @@ public class Card
             ICardEffect effect = CardEffectFactory.CreateEffect(effectData);
             effect?.ApplyEffect(context);
         }
+        return true;
     }
 
     public CardData GetCardData()
