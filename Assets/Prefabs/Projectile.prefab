@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movable: {fileID: 5249910776121602811}
   _damage: 10
+  _maxVelocity: 5
 --- !u!114 &5249910776121602811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,4 +113,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cb1606ef9ca8848a04c433b43a4379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _velocity: {x: 0, y: 0}
+  _velocity: {x: -5, y: -5}

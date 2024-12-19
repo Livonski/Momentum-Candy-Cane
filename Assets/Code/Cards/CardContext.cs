@@ -13,6 +13,11 @@ public class CardContext
         UIRequestManager.Instance.RequestDirectionChoice(onChosen, playerPosition, forward);
     }
 
+    public void AwaitPositionChoice(Action<Vector2Int> onChosen)
+    {
+        UIRequestManager.Instance.RequestPositionChoise(onChosen);
+    }
+
     public CardContext(Movable movable, Hand hand)
     {
         _movable = movable;

@@ -1,16 +1,17 @@
+using UnityEngine;
+
 [System.Serializable]
 public class CardEffectData
 {
     public EffectType Type;
     public int Value;
-
-    //Stuff for turn effect
-    public float Side;
+    public GameObject SpawnableGO;
 }
 
 public enum EffectType
 {
     Move,
-    Turn
+    Turn,
+    Shoot
 }
 

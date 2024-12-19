@@ -7,6 +7,8 @@ public class CandyCane : MonoBehaviour, ICollidable, IInitializable, IDestroyabl
     Vector2Int _gridPosition;
     public void OnCollision(GameObject obj)
     {
+        if (obj.GetComponent<Vehicle>() == null)
+            return;
         Debug.Log("Candy eaten");
         TurnManager.Instance.EnqueueDestruction(gameObject);
         gameObject.SetActive(false);

@@ -34,6 +34,17 @@ public class Map : MonoBehaviour
         return position.x < _mapSize.x && position.y < _mapSize.y && position.x >= 0 && position.y >= 0;
     }
 
+    public bool IsInsideMap(Vector3 worldPosition)
+    {
+        Vector3 halfMapSize = new Vector3(_tileSize.x * _mapSize.x * 0.5f, _tileSize.y * _mapSize.y * 0.5f);
+        Vector3 localPos = worldPosition - transform.position + halfMapSize;
+
+        int x = Mathf.FloorToInt(localPos.x / _tileSize.x);
+        int y = Mathf.FloorToInt(localPos.y / _tileSize.y);
+
+        return (x >= 0 && x < _mapSize.x && y >= 0 && y < _mapSize.y);
+    }
+
     public bool IsEmptyTile(Vector2Int position)
     {
         if(!IsInsideMap(position))
@@ -44,6 +55,17 @@ public class Map : MonoBehaviour
     public Vector3 MapToWorldPosition(Vector2Int position)
     {
         return _map[position.x, position.y].transform.position;
+    }
+
+    public Vector2Int WorldToMapPosition(Vector3 worldPosition)
+    {
+        Vector3 halfMapSize = new Vector3(_tileSize.x * _mapSize.x * 0.5f, _tileSize.y * _mapSize.y * 0.5f);
+        Vector3 localPos = worldPosition - transform.position + halfMapSize;
+
+        int x = Mathf.FloorToInt(localPos.x / _tileSize.x);
+        int y = Mathf.FloorToInt(localPos.y / _tileSize.y);
+
+        return new Vector2Int(x, y);
     }
 
     public void MoveObject(GameObject obj, Vector2Int prevPos, Vector2Int newPos)

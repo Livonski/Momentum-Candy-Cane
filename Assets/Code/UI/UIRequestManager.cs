@@ -8,6 +8,7 @@ public class UIRequestManager : MonoBehaviour
     public static UIRequestManager Instance;
 
     private Action<TurnDirection> _directionCallback;
+    private Action<Vector2Int> _positionCallback;
 
     private void Awake()
     {
@@ -18,6 +19,12 @@ public class UIRequestManager : MonoBehaviour
     {
         _directionCallback = onChosen;
         StartCoroutine(WaitForClickAndDecideDirection(playerPosition, forward));
+    }
+
+    public void RequestPositionChoise(Action<Vector2Int> onChosen)
+    {
+        _positionCallback = onChosen;
+        StartCoroutine(WaitForClickAndDecidePosition());
     }
 
     private IEnumerator WaitForClickAndDecideDirection(Vector2 playerPosition, Vector2Int forward)
@@ -32,5 +39,25 @@ public class UIRequestManager : MonoBehaviour
 
         _directionCallback?.Invoke(chosenDirection);
         _directionCallback = null;
+    }
+
+    private IEnumerator WaitForClickAndDecidePosition()
+    {
+        bool walidPosition = false;
+        while(!walidPosition)
+        {
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+
+            Vector2Int choosenPosition = Vector2Int.one;
+            Vector3 worldClickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Map map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+            if (map.IsInsideMap(worldClickPos))
+            {
+                choosenPosition = map.WorldToMapPosition(worldClickPos);
+                _positionCallback.Invoke(choosenPosition);
+                _positionCallback = null;
+                walidPosition = true;
+            }
+        }
     }
 }
