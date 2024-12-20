@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour
 
     [SerializeField] private bool _manualSubTurns;
     [SerializeField] private float _moveDelay;
+    [SerializeField] private Color _movementhighlightColor;
 
     private Player _player;
 
@@ -60,6 +61,7 @@ public class TurnManager : MonoBehaviour
         for(int i = 0; i < _movables.Count; i++)
         {
             int movePoints = _movables[i].Movable.CalculateMovePoints();
+
             //I hate lists +this is ugly
             MovableData newMovable = new MovableData(_movables[i].Movable, movePoints);
             _minMovePoints = Mathf.Min(_minMovePoints, movePoints);
@@ -93,9 +95,10 @@ public class TurnManager : MonoBehaviour
             }
             DestroyObjects();
         }
-        _processingTurn = false;
+        PredictMovements();
 
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnNewTurn();
+        _processingTurn = false;
     }
 
     public void NextSubturn()
@@ -126,6 +129,18 @@ public class TurnManager : MonoBehaviour
             return;
         while (_destructionQueue.Count > 0)
             _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
+    }
+
+    public void PredictMovements()
+    {
+        TileHighlighter.Instance.ClearHighlights();
+        for (int i = 0; i < _movables.Count; i++)
+        {
+            List<Vector2Int> trajectory = _movables[i].Movable.CalculateMovement();
+            if(trajectory.Count <= 1)
+                continue;
+            TileHighlighter.Instance.HighlightTiles(trajectory, _movementhighlightColor);
+        }
     }
 
     private void Awake()

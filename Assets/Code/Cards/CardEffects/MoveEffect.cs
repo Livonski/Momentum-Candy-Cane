@@ -16,5 +16,6 @@ public class MoveEffect : ICardEffect
         if (context == null)
             return;
         context._movable.AccelerateForward(_acceleration);
+        TurnManager.Instance.PredictMovements();
     }
 }

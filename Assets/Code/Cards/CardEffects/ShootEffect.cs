@@ -20,6 +20,7 @@ public class ShootEffect : ICardEffect
             InitializationData projectileData = new InitializationData(projectilePosition, 0, "Snowball", projectileVelocity.x, projectileVelocity.y);
             Debug.Log($"Projectile shooter position: {context._movable._gridPosition}, projectile velocity: {projectileVelocity}, projectile initial position: {projectilePosition}");
             GameObject.FindGameObjectWithTag("Map").GetComponent<Map>().SpawnObject(_projectile, projectileData);
+            TurnManager.Instance.PredictMovements();
         });
     }
 }

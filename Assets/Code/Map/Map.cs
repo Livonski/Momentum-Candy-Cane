@@ -104,6 +104,16 @@ public class Map : MonoBehaviour
         return objects;
     }
 
+    public MapObject GetTile(Vector2Int position)
+    {
+        if(!IsInsideMap(position))
+        {
+            Debug.LogError($"Map: Trying to get tile from poition({position}) outside of map bounds");
+            return null;
+        }
+        return _map[position.x, position.y];
+    }
+
     private void GenerateBlankMap(Vector2Int mapSize)
     {
         _map = new MapObject[mapSize.x, mapSize.y];

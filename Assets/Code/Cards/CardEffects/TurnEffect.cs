@@ -21,6 +21,7 @@ public class TurnEffect : ICardEffect
         {
             float side = direction == TurnDirection.Left ? -1 : 1;
             context._movable.Turn(side);
+            TurnManager.Instance.PredictMovements();
         }, context._movable.gameObject.transform.position, context._movable.Forward);
     }
 }
