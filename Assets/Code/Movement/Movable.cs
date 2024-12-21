@@ -51,18 +51,18 @@ public class Movable : MonoBehaviour, IInitializable
 
     public void Turn(float side)
     {
-        //Currently it rotates object by 45 degrees which is fine but i probably need to make
-        //an option to rotate 90 degrees
-        //or snap to next 90 degree angle
+        //Currently it rotates object by 90 degrees which is fine but i probably need to make
+        //an option to rotate 45 degrees
 
         if(side == 1)
         {
-            _velocity = new Vector2Int(Forward.y, Forward.x);
+            Debug.Log("Turning right");
+            _velocity = new Vector2Int(Forward.y, -Forward.x);
         }
         else
         {
-            _velocity = new Vector2Int(Forward.y, Forward.x);
-
+            Debug.Log("Turning left");
+            _velocity = new Vector2Int(-Forward.y, Forward.x);
         }
         Forward = _velocity;
     }
@@ -102,7 +102,7 @@ public class Movable : MonoBehaviour, IInitializable
             _gridPosition = position;
 
             StartCoroutine(SmoothMove(currentPosition, nextPosition, 0.25f));
-            RecalculateForward();
+            //RecalculateForward();
         }
     }
 
@@ -114,7 +114,7 @@ public class Movable : MonoBehaviour, IInitializable
         while (remainingPoints > 0 && _moveQueue.Count > 0)
         {
             Vector2Int nextPoint = _moveQueue.Dequeue();
-            Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
+            //Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
             MoveTo(nextPoint);
             remainingPoints--;
         }
@@ -149,7 +149,7 @@ public class Movable : MonoBehaviour, IInitializable
             {
                 _moveQueue.Enqueue(new Vector2Int(x0, y0));
                 movePoints++;
-                Debug.Log($"Queueing new point at {x0}:{y0}");
+                //Debug.Log($"Queueing new point at {x0}:{y0}");
             }
 
             if (x0 == x1 && y0 == y1)
@@ -191,7 +191,7 @@ public class Movable : MonoBehaviour, IInitializable
             //if (!(x0 == _gridPosition.x && y0 == _gridPosition.y))
             //{
                 movePoints.Add(new Vector2Int(x0, y0));
-                Debug.Log($"Queueing new point at {x0}:{y0}");
+                //Debug.Log($"Queueing new point at {x0}:{y0}");
             //}
 
             if (x0 == x1 && y0 == y1)
@@ -227,6 +227,7 @@ public class Movable : MonoBehaviour, IInitializable
 
     private void RecalculateForward()
     {
+        //For some reason this thing is not working properly
         Vector2Int[] directions =
         {
             new Vector2Int(0, 1),

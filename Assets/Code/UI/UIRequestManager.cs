@@ -7,6 +7,10 @@ public class UIRequestManager : MonoBehaviour
 {
     public static UIRequestManager Instance;
 
+    [SerializeField] private HighlightArea _leftHighlightArea;
+    [SerializeField] private HighlightArea _rightHighlightArea;
+    [SerializeField] private float _offset;
+
     private Action<TurnDirection> _directionCallback;
     private Action<Vector2Int> _positionCallback;
 
@@ -18,6 +22,12 @@ public class UIRequestManager : MonoBehaviour
     public void RequestDirectionChoice(Action<TurnDirection> onChosen, Vector2 playerPosition, Vector2Int forward)
     {
         _directionCallback = onChosen;
+        Vector2 forward2D = new Vector2(forward.x, forward.y);
+        _leftHighlightArea.PositionArea(playerPosition, forward2D, _offset);
+        _rightHighlightArea.PositionArea(playerPosition, forward2D, _offset);
+        _leftHighlightArea.BeginListening();
+        _rightHighlightArea.BeginListening();
+
         StartCoroutine(WaitForClickAndDecideDirection(playerPosition, forward));
     }
 
@@ -37,8 +47,13 @@ public class UIRequestManager : MonoBehaviour
         float side = forward.x * clickDir.y - forward.y * clickDir.x;
         TurnDirection chosenDirection = side > 0 ? TurnDirection.Left : TurnDirection.Right;
 
+        Debug.Log($"playerPosition{playerPosition}, forward{forward}, worldClickPos{worldClickPos}, clickDir{clickDir}, side{side}, chosenDirection{chosenDirection.ToString()}");
+
         _directionCallback?.Invoke(chosenDirection);
         _directionCallback = null;
+
+        _leftHighlightArea.StopListening();
+        _rightHighlightArea.StopListening();
     }
 
     private IEnumerator WaitForClickAndDecidePosition()
