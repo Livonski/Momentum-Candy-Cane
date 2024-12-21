@@ -131,6 +131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _avaliableCards:
   - {fileID: 11400000, guid: 04604c91f3fee924a83c9a61bb5b3601, type: 2}
+  - {fileID: 11400000, guid: 5560de8f50ac78543ab93ac848875975, type: 2}
+  - {fileID: 11400000, guid: 1fa3cce997672c648b71ff64e04671f3, type: 2}
   _initialChristmasSpirit: 3
 --- !u!114 &1305847026606817301
 MonoBehaviour:
