@@ -18,7 +18,7 @@ public class TurnManager : MonoBehaviour
     }
 
     [SerializeField] private bool _manualSubTurns;
-    [SerializeField] private float _moveDelay;
+    [SerializeField] public float _moveDelay;
     [SerializeField] private Color _movementhighlightColor;
 
     private Player _player;

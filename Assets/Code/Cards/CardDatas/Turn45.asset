@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919aa272e1c706947a24fd17775b9dd4, type: 3}
   m_Name: Turn45
   m_EditorClassIdentifier: 
-  CardName: Turn
+  CardName: Turn 45
   CardImage: {fileID: 21300000, guid: 93219e178d39b564da49cc4168230579, type: 3}
   SpiritCost: 1
   Effects:

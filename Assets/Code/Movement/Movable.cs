@@ -116,7 +116,9 @@ public class Movable : MonoBehaviour, IInitializable
             _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;
 
-            StartCoroutine(SmoothMove(currentPosition, nextPosition, 0.25f));
+            //Because it's continues to execute next points while coroutine is working
+            //Movable dequeues next points basicly jumping to the end
+            StartCoroutine(SmoothMove(currentPosition, nextPosition, TurnManager.Instance._moveDelay));
             //RecalculateForward();
         }
     }
@@ -129,7 +131,7 @@ public class Movable : MonoBehaviour, IInitializable
         while (remainingPoints > 0 && _moveQueue.Count > 0)
         {
             Vector2Int nextPoint = _moveQueue.Dequeue();
-            //Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
+            Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
             MoveTo(nextPoint);
             remainingPoints--;
         }
@@ -164,7 +166,7 @@ public class Movable : MonoBehaviour, IInitializable
             {
                 _moveQueue.Enqueue(new Vector2Int(x0, y0));
                 movePoints++;
-                //Debug.Log($"Queueing new point at {x0}:{y0}");
+                Debug.Log($"Queueing new point at {x0}:{y0}");
             }
 
             if (x0 == x1 && y0 == y1)
@@ -230,7 +232,7 @@ public class Movable : MonoBehaviour, IInitializable
     private IEnumerator SmoothMove(Vector3 startPosition, Vector3 endPosition, float duration)
     {
         float elapsedTime = 0f;
-        while(elapsedTime < duration)
+        while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
             transform.position = Vector3.Lerp(startPosition, endPosition, t);

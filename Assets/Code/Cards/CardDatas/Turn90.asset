@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919aa272e1c706947a24fd17775b9dd4, type: 3}
   m_Name: Turn90
   m_EditorClassIdentifier: 
-  CardName: Turn
+  CardName: Turn 90
   CardImage: {fileID: 21300000, guid: 93219e178d39b564da49cc4168230579, type: 3}
   SpiritCost: 1
   Effects:
   - Type: 1
-    Value: 1
+    Value: 2
     SpawnableGO: {fileID: 0}
-  Description: Turns you at 45 degree angle cancelling all momentum
+  Description: Turns you at 90 degree angle cancelling all momentum

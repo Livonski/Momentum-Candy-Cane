@@ -42,7 +42,6 @@ public class Projectile : MonoBehaviour, ICollidable, IDestroyable, IDamageDeale
         //It is possible to spawn a projectile on top of some other object
         //In this case objects doesn't collide with each other
         Vector2Int velocity = CalculateMovePoints(position, direction, out initialPosition);
-        _movable.AddVelocity(velocity);
         return velocity;
     }
 
