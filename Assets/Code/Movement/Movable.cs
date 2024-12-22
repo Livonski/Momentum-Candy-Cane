@@ -96,7 +96,7 @@ public class Movable : MonoBehaviour, IInitializable
         {
             StopAllCoroutines();
             Vector3 currentPosition = transform.position;
-            Vector3 nextPosition = _map.MapToWorldPosition(position);
+            Vector3 nextPosition = _map.MapToWorldPosition(position) + new Vector3(0,0,-1);
 
             _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Move
   m_EditorClassIdentifier: 
   CardName: Move
-  CardImage: {fileID: 0}
+  CardImage: {fileID: 21300000, guid: 7ef27ee49eb9e8e48876eed0c8e47212, type: 3}
   SpiritCost: 1
   Effects:
   - Type: 0
     Value: 2
+    SpawnableGO: {fileID: 0}
   Description: Accelerate forward by 2 tiles

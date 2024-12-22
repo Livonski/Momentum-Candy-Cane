@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shoot
   m_EditorClassIdentifier: 
   CardName: Shoot snowball
-  CardImage: {fileID: 0}
+  CardImage: {fileID: 21300000, guid: a147eb6aca66aee418aa9a969267f2e0, type: 3}
   SpiritCost: 1
   Effects:
   - Type: 2

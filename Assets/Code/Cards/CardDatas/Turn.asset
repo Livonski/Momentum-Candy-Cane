@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Turn
   m_EditorClassIdentifier: 
   CardName: Turn
-  CardImage: {fileID: 0}
+  CardImage: {fileID: 21300000, guid: 93219e178d39b564da49cc4168230579, type: 3}
   SpiritCost: 1
   Effects:
   - Type: 1
     Value: 1
+    SpawnableGO: {fileID: 0}
   Description: Turn left or right
