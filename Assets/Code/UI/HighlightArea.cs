@@ -24,6 +24,10 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private bool _isHighlighted = false;
     private bool _isListening = false;
 
+    private Vector2 _lastPosition = Vector2.zero;
+    private Vector2 _lastForward = Vector2.zero;
+    private float _lastOffset = 0f;
+
     private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
@@ -35,6 +39,10 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void PositionArea(Vector2 playerPosition, Vector2 forward, float offset)
     {
+        _lastPosition = playerPosition;
+        _lastForward = forward;
+        _lastOffset = offset;
+
         Vector2 perp;
         if (_side == HighlightSide.Left)
         {
@@ -61,6 +69,12 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         float angle = Mathf.Atan2(forward.y, forward.x) * (180 / Mathf.PI) + 180;
         _rectTransform.localEulerAngles = new Vector3(0f, 0f, angle);
         _textGO.GetComponent<RectTransform>().localEulerAngles = new Vector3(0f, 0f, -angle);
+    }
+
+    public void OnCameraMove()
+    {
+        if (_isListening)
+            PositionArea(_lastPosition, _lastForward, _lastOffset);
     }
 
     public void BeginListening()
