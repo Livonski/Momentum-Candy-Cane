@@ -90,8 +90,7 @@ public class TurnManager : MonoBehaviour
             Debug.Log($"Sub-turn {i}");
             foreach(var moveData in _movables)
             {
-                moveData.Movable.MoveBy(moveData.NumberOfMoves);
-                yield return new WaitForSeconds(_moveDelay);
+                yield return StartCoroutine(moveData.Movable.MoveBy(moveData.NumberOfMoves));
             }
             DestroyObjects();
         }

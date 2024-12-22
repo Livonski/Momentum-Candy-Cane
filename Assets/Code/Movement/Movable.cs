@@ -89,7 +89,7 @@ public class Movable : MonoBehaviour, IInitializable
         MoveTo(nextPosition);
     }
 
-    private void MoveTo(Vector2Int position)
+    private IEnumerator MoveTo(Vector2Int position)
     {
         List<GameObject> objectsInTile = _map.GetObjectsInTile(position);
         bool blocked = false;
@@ -103,36 +103,36 @@ public class Movable : MonoBehaviour, IInitializable
             obj.GetComponent<ICollidable>()?.OnCollision(gameObject);
         }
 
-        if (blocked)
-            return;
-
+        if (blocked) 
+            yield break;
 
         if (_map.IsInsideMap(position))
         {
-            StopAllCoroutines();
             Vector3 currentPosition = transform.position;
             Vector3 nextPosition = _map.MapToWorldPosition(position) + new Vector3(0,0,-1);
 
             _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;
 
-            //Because it's continues to execute next points while coroutine is working
-            //Movable dequeues next points basicly jumping to the end
-            StartCoroutine(SmoothMove(currentPosition, nextPosition, TurnManager.Instance._moveDelay));
+            yield return StartCoroutine(SmoothMove(currentPosition, nextPosition, TurnManager.Instance._moveDelay));
             //RecalculateForward();
         }
     }
 
-    public void MoveBy(int points)
+    public IEnumerator MoveBy(int points)
     {
-        if(_moveQueue == new Queue<Vector2Int>())
-            return;
+        if(_moveQueue.Count == 0)
+            yield break;
+
         int remainingPoints = points;
+
         while (remainingPoints > 0 && _moveQueue.Count > 0)
         {
             Vector2Int nextPoint = _moveQueue.Dequeue();
             Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
-            MoveTo(nextPoint);
+
+            yield return StartCoroutine(MoveTo(nextPoint));
+
             remainingPoints--;
         }
     }
