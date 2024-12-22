@@ -14,6 +14,18 @@ public class Movable : MonoBehaviour, IInitializable
     private ICollidable _collidable;
     private Queue<Vector2Int> _moveQueue;
 
+    private static readonly List<Vector2Int> Directions = new List<Vector2Int>
+    {
+        new Vector2Int( 0,  1),  // up
+        new Vector2Int( 1,  1),  // up-right
+        new Vector2Int( 1,  0),  // right
+        new Vector2Int( 1, -1),  // down-right
+        new Vector2Int( 0, -1),  // down
+        new Vector2Int(-1, -1),  // down-left
+        new Vector2Int(-1,  0),  // left
+        new Vector2Int(-1,  1)   // up-left
+    };
+
     public void OnInitialize(InitializationData data)
     {
         _gridPosition = data.GridPosition;
@@ -49,22 +61,25 @@ public class Movable : MonoBehaviour, IInitializable
         AddVelocity(acceleration);
     }
 
-    public void Turn(float side)
+    public void Turn(float side, int numRotations)
     {
-        //Currently it rotates object by 90 degrees which is fine but i probably need to make
-        //an option to rotate 45 degrees
+        int currentIndex = Directions.IndexOf(Forward);
+        if (currentIndex < 0)
+        {
+            Debug.LogWarning("Forward not found in directions list.");
+            return;
+        }
 
-        if(side == 1)
+        int delta = (side == 1) ? numRotations : -numRotations;
+        int newIndex = (currentIndex + delta) % Directions.Count;
+        if (newIndex < 0)
         {
-            Debug.Log("Turning right");
-            _velocity = new Vector2Int(Forward.y, -Forward.x);
+            newIndex += Directions.Count; 
         }
-        else
-        {
-            Debug.Log("Turning left");
-            _velocity = new Vector2Int(-Forward.y, Forward.x);
-        }
-        Forward = _velocity;
+
+        Forward = Directions[newIndex];
+        _velocity = Forward;
+        RotateToForward();
     }
 
     public void Move()
@@ -228,22 +243,10 @@ public class Movable : MonoBehaviour, IInitializable
     private void RecalculateForward()
     {
         //For some reason this thing is not working properly
-        Vector2Int[] directions =
-        {
-            new Vector2Int(0, 1),
-            new Vector2Int(1, 1),
-            new Vector2Int(1, 0),
-            new Vector2Int(1, -1),
-            new Vector2Int(0, -1),
-            new Vector2Int(-1, -1),
-            new Vector2Int(-1, 0),
-            new Vector2Int(-1, 1)
-        };
-
-        Vector2Int bestDirection = directions[0];
+        Vector2Int bestDirection = Directions[0];
         float bestScore = float.MinValue;
 
-        foreach (Vector2Int direction in directions)
+        foreach (Vector2Int direction in Directions)
         {
             float score = Vector2.Dot(_velocity, direction);
             if(score > bestScore)
@@ -253,6 +256,14 @@ public class Movable : MonoBehaviour, IInitializable
             }
         }
         Forward = bestDirection;
+        RotateToForward();
         Debug.Log($"{transform.name} new forward: {Forward}");
+    }
+
+    private void RotateToForward()
+    {
+        Vector3 newRotation = transform.rotation.eulerAngles;
+        newRotation.z = Mathf.Atan2(Forward.y, Forward.x) * Mathf.Rad2Deg + 180;
+        transform.rotation = Quaternion.Euler(newRotation);
     }
 }
