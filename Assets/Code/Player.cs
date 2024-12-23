@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
         }
 
         _playerVehicle = GetComponent<Vehicle>();
+        GameObject.Find("CameraTarget").GetComponent<CameraTarget>().JumpToPlayer(transform.position);
     }
 
     public int GetChristmasSpiritRegen()

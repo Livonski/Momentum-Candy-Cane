@@ -19,6 +19,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _wallGameObject;
     private List<Vector2Int> _wallPositions;
 
+    [SerializeField] private GameObject _candyGameObject;
+    private List<Vector2Int> _candiesPositions;
+
     private void Start()
     {
         if (_map == null)
@@ -26,7 +29,9 @@ public class GameController : MonoBehaviour
         _map.GenerateMap();
 
         LoadWallData();
+        LoadCandiesData();
         SpawnWalls();
+        SpawnCandies();
         SpawnObjects();
         DrawInitialCards();
     }
@@ -58,7 +63,23 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Файл walls.json не найден");
+            Debug.LogError("File walls.json not found");
+            _wallPositions = new List<Vector2Int>();
+        }
+    }
+
+    private void LoadCandiesData()
+    {
+        string path = Path.Combine(Application.dataPath, "candies.json");
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            var candyDataWrapper = JsonUtility.FromJson<CandyDataWrapper>(json);
+            _candiesPositions = candyDataWrapper.CandyPositions;
+        }
+        else
+        {
+            Debug.LogError("File candies.json not found");
             _wallPositions = new List<Vector2Int>();
         }
     }
@@ -70,6 +91,17 @@ public class GameController : MonoBehaviour
         {
             var initializationData = new InitializationData(position,ID,"Wall");
             _map.SpawnObject(_wallGameObject, initializationData);
+            ID++;
+        }
+    }
+
+    private void SpawnCandies()
+    {
+        int ID = 0;
+        foreach (var position in _candiesPositions)
+        {
+            var initializationData = new InitializationData(position, ID, "Candy cane");
+            _map.SpawnObject(_candyGameObject, initializationData);
             ID++;
         }
     }
@@ -102,4 +134,10 @@ public class GameController : MonoBehaviour
 public class WallDataWrapper
 {
     public List<Vector2Int> WallPositions;
+}
+
+[System.Serializable]
+public class CandyDataWrapper
+{
+    public List<Vector2Int> CandyPositions;
 }

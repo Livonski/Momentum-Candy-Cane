@@ -25,4 +25,9 @@ public class CameraTarget : MonoBehaviour
         _highlightLeft.OnCameraMove();
         _highlightRight.OnCameraMove();
     }
+
+    public void JumpToPlayer(Vector3 playerPosition)
+    {
+        transform.position = playerPosition;
+    }
 }
