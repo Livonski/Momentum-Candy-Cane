@@ -3473,97 +3473,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c56b6a44114294b8bf3eea91954343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _testObjects:
-  - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
-    initializationData:
-      GridPosition: {x: 0, y: 0}
-      ID: 1
-      DefaultName: TestObj
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 3082211143577698974, guid: d9a5791b1dd7f55408642ca0cfd47f1c, type: 3}
-    initializationData:
-      GridPosition: {x: 5, y: 5}
-      ID: 2
-      DefaultName: Player
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
-    initializationData:
-      GridPosition: {x: 8, y: 8}
-      ID: 3
-      DefaultName: TestObj
-      InitialSpeed: {x: -1, y: 0}
-  - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
-    initializationData:
-      GridPosition: {x: 4, y: 4}
-      ID: 5
-      DefaultName: Candy
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 1, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 2, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 3, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 4, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 5, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 6, y: 6}
-      ID: 0
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
-    initializationData:
-      GridPosition: {x: 1, y: 6}
-      ID: 7
-      DefaultName: Wall
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 5141405141847280488, guid: f148507473a09214aa49ccf4051bb5b2, type: 3}
-    initializationData:
-      GridPosition: {x: 9, y: 9}
-      ID: 7
-      DefaultName: Projectile
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
-    initializationData:
-      GridPosition: {x: 3, y: 3}
-      ID: 20
-      DefaultName: CandyCane
-      InitialSpeed: {x: 0, y: 0}
-  - obj: {fileID: 4694708918527582041, guid: 539038282b1eea24e9e0085fe06499f6, type: 3}
-    initializationData:
-      GridPosition: {x: 1, y: 8}
-      ID: 20
-      DefaultName: FinishLine
-      InitialSpeed: {x: 0, y: 0}
   _map: {fileID: 1536951974}
   _player: {fileID: 0}
   _initialCards: 3
   _totalVehicles: 3
   _totalCrossedLine: 0
   _endMenu: {fileID: 546537168}
+  _objects:
+  - obj: {fileID: 3082211143577698974, guid: d9a5791b1dd7f55408642ca0cfd47f1c, type: 3}
+    initializationData:
+      GridPosition: {x: 5, y: 5}
+      ID: 0
+      DefaultName: Player
+      InitialSpeed: {x: 0, y: 0}
+  _wallGameObject: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
 --- !u!4 &599510392
 Transform:
   m_ObjectHideFlags: 0
