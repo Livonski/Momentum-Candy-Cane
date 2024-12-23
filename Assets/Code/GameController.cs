@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private int _initialCards;
 
+    [SerializeField] private int _totalVehicles = 0;
+    [SerializeField] private int _totalCrossedLine = 0;
+
     [SerializeField] private EndMenu _endMenu;
     private void Start()
     {
@@ -27,7 +30,13 @@ public class GameController : MonoBehaviour
 
     public void OnPlayerWin(int totalCandiesEaten)
     {
-        _endMenu.ShowEndScreen("You win", totalCandiesEaten);
+        _totalCrossedLine++;
+        _endMenu.ShowEndScreen($"You win, you came {_totalCrossedLine}/{_totalVehicles}", totalCandiesEaten);
+    }
+
+    public void OnCrossLine()
+    {
+        _totalCrossedLine++;
     }
 
     private void SpawnTestObjects()

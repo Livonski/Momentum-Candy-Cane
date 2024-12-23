@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDamageDealer
 {
+    private bool _player;
+
     [SerializeField] private Movable _movable;
     [SerializeField] private int _maxHP;
     [SerializeField] private int _currentHP;
@@ -16,6 +18,7 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
     {
         _movable = GetComponent<Movable>();
         _currentHP = _maxHP;
+        _player = GetComponent<Player>() != null;
         CandiesEaten = 0;
     }
 
@@ -23,7 +26,21 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
     {
         Debug.Log($"{transform.name} got hit by {obj.name}");
         Debug.Log("Got hit by damage dealer: " + obj.GetComponent<IDamageDealer>() != null);
-        if(obj.GetComponent<IDamageDealer>() != null)
+        if (obj.GetComponent<FinishLine>() != null)
+        {
+            Debug.Log($"{transform.name} crossed finish line!");
+            if (_player)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>().OnPlayerWin(CandiesEaten);
+            }
+            else
+            {
+                TakeDamage(_maxHP);
+            }
+            return;
+        }
+
+        if (obj.GetComponent<IDamageDealer>() != null)
         {
             TakeDamage(obj.GetComponent<IDamageDealer>().CalculateDamage());
         }

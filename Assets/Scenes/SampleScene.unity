@@ -1497,7 +1497,7 @@ MonoBehaviour:
   m_margin: {x: -112.67871, y: 0, z: -123.24243, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &218307940
@@ -2329,7 +2329,7 @@ RectTransform:
   m_GameObject: {fileID: 396710221}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 218307938}
@@ -3392,7 +3392,7 @@ MonoBehaviour:
       GridPosition: {x: 8, y: 8}
       ID: 3
       DefaultName: TestObj
-      InitialSpeed: {x: 0, y: 0}
+      InitialSpeed: {x: -1, y: 0}
   - obj: {fileID: 8377922930096742541, guid: 2a37b2734ba722043adea669a10b84a8, type: 3}
     initializationData:
       GridPosition: {x: 4, y: 4}
@@ -3453,9 +3453,17 @@ MonoBehaviour:
       ID: 20
       DefaultName: CandyCane
       InitialSpeed: {x: 0, y: 0}
+  - obj: {fileID: 4694708918527582041, guid: 539038282b1eea24e9e0085fe06499f6, type: 3}
+    initializationData:
+      GridPosition: {x: 1, y: 8}
+      ID: 20
+      DefaultName: FinishLine
+      InitialSpeed: {x: 0, y: 0}
   _map: {fileID: 1536951974}
   _player: {fileID: 0}
   _initialCards: 3
+  _totalVehicles: 3
+  _totalCrossedLine: 0
   _endMenu: {fileID: 546537168}
 --- !u!4 &599510392
 Transform:
@@ -5895,7 +5903,7 @@ RectTransform:
   m_GameObject: {fileID: 1926254241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1007824251}
