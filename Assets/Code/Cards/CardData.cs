@@ -10,4 +10,5 @@ public class CardData : ScriptableObject
     public int SpiritCost;
     public List<CardEffectData> Effects;
     public string Description;
+    public AudioClip PlayClip;
 }

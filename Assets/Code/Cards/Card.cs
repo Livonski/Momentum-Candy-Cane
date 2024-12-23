@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Card
 {
-    [SerializeField] private CardData _cardDataReference;
+    private CardData _cardDataReference;
+    private AudioClip _playClip;
 
     public Card(CardData cardDataReference)
     {
@@ -33,6 +34,8 @@ public class Card
         }
 
         context._hand.DecreaseChristmasSpirit(_cardDataReference.SpiritCost);
+        if(_cardDataReference.PlayClip != null) 
+            SFXPlayer.Instance.PlaySFX(_cardDataReference.PlayClip);
 
         foreach(var effectData in _cardDataReference.Effects)
         {
