@@ -72,6 +72,12 @@ public class Movable : MonoBehaviour, IInitializable
         Vector2Int acceleration = Forward * velocity;
         AddVelocity(acceleration);
     }
+    public void AccelerateBackward(int velocity)
+    {
+        Debug.Log($"Accelerating backward by {velocity}");
+        Vector2Int acceleration = Forward * -velocity;
+        _velocity += acceleration;
+    }
 
     public void Turn(float side, int numRotations)
     {

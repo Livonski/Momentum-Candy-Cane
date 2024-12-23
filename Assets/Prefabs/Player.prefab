@@ -137,6 +137,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1fa3cce997672c648b71ff64e04671f3, type: 2}
   - {fileID: 11400000, guid: 7bb0b3fcd7c8bef4a99ad4f922f94816, type: 2}
   - {fileID: 11400000, guid: c0c793fec16b5f84db39acb75df3f1f9, type: 2}
+  - {fileID: 11400000, guid: 62cd5c4319962fd408eff3bb83475ff3, type: 2}
+  - {fileID: 11400000, guid: b691559a7a3ed9441962a2748422f3f1, type: 2}
+  - {fileID: 11400000, guid: e5400b0c904afb0489503124431f6f37, type: 2}
   _initialChristmasSpirit: 3
 --- !u!114 &1305847026606817301
 MonoBehaviour:

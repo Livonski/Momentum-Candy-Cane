@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919aa272e1c706947a24fd17775b9dd4, type: 3}
+  m_Name: DrawCard2
+  m_EditorClassIdentifier: 
+  CardName: Draw cards
+  CardImage: {fileID: 21300000, guid: 75e04890de5a8554391a7e4778284957, type: 3}
+  SpiritCost: 1
+  Effects:
+  - Type: 4
+    Value: 2
+    SpawnableGO: {fileID: 0}
+  Description: Draw 2 cards
+  PlayClip: {fileID: 8300000, guid: fdf5bb77869005c44aa8ef909676cf8c, type: 3}

@@ -7,7 +7,7 @@ public class CardContext
 {
     public Movable _movable;
     public Hand _hand;
-
+    public Vehicle _vehicle;
     public void AwaitDirectionChoice(Action<TurnDirection> onChosen, Vector2 playerPosition, Vector2Int forward)
     {
         UIRequestManager.Instance.RequestDirectionChoice(onChosen, playerPosition, forward);
@@ -18,9 +18,10 @@ public class CardContext
         UIRequestManager.Instance.RequestPositionChoise(onChosen);
     }
 
-    public CardContext(Movable movable, Hand hand)
+    public CardContext(Movable movable, Hand hand, Vehicle vehicle)
     {
         _movable = movable;
         _hand = hand;
+        _vehicle = vehicle;
     }
 }

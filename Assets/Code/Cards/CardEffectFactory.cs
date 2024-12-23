@@ -14,6 +14,12 @@ public static class CardEffectFactory
                 return new TurnEffect(data);
             case EffectType.Shoot:
                 return new ShootEffect(data);
+            case EffectType.Heal:
+                return new HealEffect(data);
+            case EffectType.DrawCards:
+                return new DrawCardEffect(data);
+            case EffectType.MoveBackwards:
+                return new MoveBackwardEffect(data);
             default:
                 Debug.LogWarning($"Unknown card effect {data.Type}");
                 return null;

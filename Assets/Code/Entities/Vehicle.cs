@@ -44,6 +44,13 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
         }
     }
 
+    public void Heal(int amount)
+    {
+        if (amount < 1)
+            return;
+        _currentHP = Mathf.Min(_currentHP + amount, _maxHP);
+    }
+
     public void OnRemove()
     {
         GameObject.FindGameObjectWithTag("Map").GetComponent<Map>().RemoveObject(gameObject, _movable._gridPosition);

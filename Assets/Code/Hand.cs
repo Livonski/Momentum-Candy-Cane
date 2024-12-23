@@ -18,7 +18,8 @@ public class Hand : MonoBehaviour
     {
         _hand = new List<Card>();
         Movable movable = GetComponent<Movable>();
-        _context = new CardContext(movable, this);
+        Vehicle vehicle = GetComponent<Vehicle>();
+        _context = new CardContext(movable, this, vehicle);
 
         _deck = new Deck(_avaliableCards);
         _christmasSpirit = _initialChristmasSpirit;
@@ -33,6 +34,15 @@ public class Hand : MonoBehaviour
     {
         _hand.Add(_deck.DrawCard());
         OnHandChanged?.Invoke(_hand);
+    }
+
+    public void DrawCards(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            _hand.Add(_deck.DrawCard());
+            OnHandChanged?.Invoke(_hand);
+        }
     }
 
     public void PlayCard(int cardID)

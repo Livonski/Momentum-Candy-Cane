@@ -12,6 +12,9 @@ public enum EffectType
 {
     Move,
     Turn,
-    Shoot
+    Shoot,
+    Heal,
+    DrawCards,
+    MoveBackwards
 }
 
