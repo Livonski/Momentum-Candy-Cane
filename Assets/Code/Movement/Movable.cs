@@ -40,7 +40,15 @@ public class Movable : MonoBehaviour, IInitializable
 
         _moveQueue = new Queue<Vector2Int>();
 
-        Forward = new Vector2Int(-1,0);
+        if(_velocity != Vector2Int.zero)
+        {
+            RecalculateForward();
+        }
+        else
+        {
+            Forward = new Vector2Int(-1, 0);
+            RotateToForward();
+        }
     }
 
     public void AddVelocity(Vector2Int velocity)
@@ -245,7 +253,7 @@ public class Movable : MonoBehaviour, IInitializable
     private void RecalculateForward()
     {
         //For some reason this thing is not working properly
-        Vector2Int bestDirection = Directions[0];
+        /*Vector2Int bestDirection = Directions[0];
         float bestScore = float.MinValue;
 
         foreach (Vector2Int direction in Directions)
@@ -256,12 +264,22 @@ public class Movable : MonoBehaviour, IInitializable
                 bestDirection = direction;
                 bestScore = score;
             }
+        }*/
+        //This is suboptimal, but really convenient. So I'll use this for now...
+        List<Vector2Int> points = CalculateMovement();
+
+        if (points.Count > 1)
+        {
+            Forward = points[1] - _gridPosition;
         }
-        Forward = bestDirection;
+        else
+        {
+            Forward = new Vector2Int(-1, 0);
+        }
+
         RotateToForward();
         Debug.Log($"{transform.name} new forward: {Forward}");
     }
-
     private void RotateToForward()
     {
         Vector3 newRotation = transform.rotation.eulerAngles;
