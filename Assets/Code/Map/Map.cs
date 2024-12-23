@@ -7,6 +7,7 @@ public class Map : MonoBehaviour
     private MapObject[,] _map;
     [SerializeField] private Vector2Int _mapSize;
     [SerializeField] private GameObject _blankTile;
+    [SerializeField] private GameObject _snowGO;
     private Vector2 _tileSize;
 
     public void GenerateMap()
@@ -116,6 +117,7 @@ public class Map : MonoBehaviour
 
     private void GenerateBlankMap(Vector2Int mapSize)
     {
+        Renderer snowRenderer = _snowGO.GetComponent<Renderer>();
         _map = new MapObject[mapSize.x, mapSize.y];
         _tileSize = _blankTile.GetComponent<SpriteRenderer>().bounds.size;
         Vector3 halfMapSize = new Vector3(_tileSize.x * mapSize.x / 2, _tileSize.y * _mapSize.y / 2);
@@ -131,7 +133,17 @@ public class Map : MonoBehaviour
                 newMapObject.OnInitialize(initializationData);
 
                 _map[x, y] = newMapObject;
+
+                //Hello, I'm not working at all
+                snowRenderer.bounds.Encapsulate(position);
             }
         }
+        /*Vector3 center = gameObject.GetComponent<Renderer>().bounds.center;
+        Vector3 size = _tileSize * new Vector3(_mapSize.x, 0, _mapSize.y) * 2;
+        Bounds newBounds = new Bounds(center, size);
+        Debug.Log($"Bounds center: {center}, size: {size}");
+
+        _snowGO.GetComponent<Renderer>().bounds = newBounds;
+        _snowGO.GetComponent<Renderer>().bounds.*/
     }
 }
