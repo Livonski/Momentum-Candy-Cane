@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     private HandView _handView;
     private Button _drawCardButton;
+    Vehicle _playerVehicle;
     void Start()
     {
         _hand = GetComponent<Hand>();
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("Player: _drawCardButton is not set");
         }
+
+        _playerVehicle = GetComponent<Vehicle>();
     }
 
     public int GetChristmasSpiritRegen()
@@ -55,5 +58,11 @@ public class Player : MonoBehaviour
         {
             _hand.DrawCard();
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameController gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.OnPlayerKilled(_playerVehicle.CandiesEaten);
     }
 }

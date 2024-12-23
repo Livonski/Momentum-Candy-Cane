@@ -13,6 +13,9 @@ public class ChristmasSpiritDisplay : MonoBehaviour
     private void Initialize()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+            return;
+
         _player = player.GetComponent<Player>();
         _playerHand = player.GetComponent<Hand>();
         _displayText = GetComponent<TextMeshProUGUI>();

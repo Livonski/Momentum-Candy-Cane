@@ -12,6 +12,9 @@ public class MomentumDisplay : MonoBehaviour
     private void Initialize()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+            return;
+
         _playerMovable = player.GetComponent<Movable>();
         _displayText = GetComponent<TextMeshProUGUI>();
     }

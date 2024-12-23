@@ -4,24 +4,13 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    private static TurnManager _instance;
-    public static TurnManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance = GameObject.FindObjectOfType<TurnManager>();
-            }
-            return _instance;
-        }
-    }
+    public static TurnManager Instance;
 
     [SerializeField] private bool _manualSubTurns;
     [SerializeField] public float _moveDelay;
     [SerializeField] private Color _movementhighlightColor;
 
-    private Player _player;
+    //private Player _player;
 
     private List<MovableData> _movables;
     private int _minMovePoints;
@@ -30,11 +19,20 @@ public class TurnManager : MonoBehaviour
 
     private Queue<GameObject> _destructionQueue;
 
+    private void OnLevelWasLoaded(int level)
+    {
+        _movables = new List<MovableData>();
+        _minMovePoints = 0;
+        _currentSubturn = 0;
+        _processingTurn = false;
+    }
+
     public void AddMovable(Movable movable)
     {
         _movables ??= new List<MovableData>();
         MovableData newMovable = new MovableData(movable);
         _movables.Add(newMovable);
+        Debug.Log("Adding new movable");
     }
 
     public float CurrentMoveDelay()
@@ -144,7 +142,15 @@ public class TurnManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private struct MovableData

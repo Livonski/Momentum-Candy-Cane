@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private Map _map;
     [SerializeField] private Player _player;
     [SerializeField] private int _initialCards;
+
+    [SerializeField] private EndMenu _endMenu;
     private void Start()
     {
         if (_map == null)
@@ -15,6 +18,16 @@ public class GameController : MonoBehaviour
         _map.GenerateMap();
         SpawnTestObjects();
         DrawInitialCards();
+    }
+
+    public void OnPlayerKilled(int totalCandiesEaten)
+    {
+        _endMenu.ShowEndScreen("You lost", totalCandiesEaten);
+    }
+
+    public void OnPlayerWin(int totalCandiesEaten)
+    {
+        _endMenu.ShowEndScreen("You win", totalCandiesEaten);
     }
 
     private void SpawnTestObjects()

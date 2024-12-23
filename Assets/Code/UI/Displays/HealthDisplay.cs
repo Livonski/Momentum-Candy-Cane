@@ -12,6 +12,9 @@ public class HealthDisplay : MonoBehaviour
     private void Initialize()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+            return;
+
         _playerVehicle = player.GetComponent<Vehicle>();
         _displayText = GetComponent<TextMeshProUGUI>();
     }
