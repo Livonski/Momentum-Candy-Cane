@@ -7,7 +7,6 @@ public class Obstacle : MonoBehaviour, IInitializable, IBlockable
     [SerializeField] private List<GameObject> _props; 
     [SerializeField] private int minProps = 1;        
     [SerializeField] private int maxProps = 5;
-    [SerializeField] private int numberOfProps = 10;
 
 
     private Vector2Int _gridPosition;

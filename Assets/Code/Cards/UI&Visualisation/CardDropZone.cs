@@ -10,7 +10,6 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
 
-    private bool _isHighlighted = false;
 
     private void Start()
     {
@@ -23,7 +22,6 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         if (_highlightImage != null && eventData.pointerDrag != null)
         {
             _highlightImage.color =_activeColor;
-            _isHighlighted = true;
         }
     }
 
@@ -32,7 +30,7 @@ public class CardDropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         if (_highlightImage != null)
         {
             _highlightImage.color = new Color(1, 1, 1, 0);
-            _isHighlighted = false;
+
         }
     }
 

@@ -21,7 +21,6 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private Color _activeColor;
     [SerializeField] private Color _inactiveColor;
 
-    private bool _isHighlighted = false;
     private bool _isListening = false;
 
     private Vector2 _lastPosition = Vector2.zero;
@@ -87,7 +86,6 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         _isListening = false;
         _highlightImage.color = _inactiveColor;
-        _isHighlighted = false;
         _canvasGroup.blocksRaycasts = false;
         _textGO.SetActive(false);
     }
@@ -97,7 +95,6 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (_highlightImage != null  && _isListening)
         {
             _highlightImage.color = _activeColor;
-            _isHighlighted = true;
             _textGO.SetActive(true);
         }
     }
@@ -107,7 +104,6 @@ public class HighlightArea : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (_highlightImage != null && _isListening)
         {
             _highlightImage.color = new Color(1, 1, 1, 0);
-            _isHighlighted = false;
             _textGO.SetActive(false);
         }
     }
