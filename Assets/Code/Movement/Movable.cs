@@ -7,6 +7,8 @@ public class Movable : MonoBehaviour, IInitializable
 {
     public Vector2Int _gridPosition { get; private set; }
     public Vector2Int Forward { get; private set; }
+    public int Momentum { get; private set; }
+
     [SerializeField] private Vector2Int _velocity;
 
     private float _moveDelay;
@@ -39,6 +41,8 @@ public class Movable : MonoBehaviour, IInitializable
         _moveDelay = TurnManager.Instance.CurrentMoveDelay();
 
         _moveQueue = new Queue<Vector2Int>();
+
+        Momentum = 0;
 
         if(_velocity != Vector2Int.zero)
         {
@@ -192,6 +196,7 @@ public class Movable : MonoBehaviour, IInitializable
                 y0 += sy;
             }
         }
+        Momentum = movePoints;
         return movePoints;
     }
 
@@ -213,11 +218,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         while (true)
         {
-            //if (!(x0 == _gridPosition.x && y0 == _gridPosition.y))
-            //{
-                movePoints.Add(new Vector2Int(x0, y0));
-                //Debug.Log($"Queueing new point at {x0}:{y0}");
-            //}
+           movePoints.Add(new Vector2Int(x0, y0));
 
             if (x0 == x1 && y0 == y1)
                 break;
@@ -234,6 +235,7 @@ public class Movable : MonoBehaviour, IInitializable
                 y0 += sy;
             }
         }
+        Momentum = movePoints.Count - 1;
         return movePoints;
     }
 
@@ -253,18 +255,6 @@ public class Movable : MonoBehaviour, IInitializable
     private void RecalculateForward()
     {
         //For some reason this thing is not working properly
-        /*Vector2Int bestDirection = Directions[0];
-        float bestScore = float.MinValue;
-
-        foreach (Vector2Int direction in Directions)
-        {
-            float score = Vector2.Dot(_velocity, direction);
-            if(score > bestScore)
-            {
-                bestDirection = direction;
-                bestScore = score;
-            }
-        }*/
         //This is suboptimal, but really convenient. So I'll use this for now...
         List<Vector2Int> points = CalculateMovement();
 

@@ -10,10 +10,13 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
 
     [SerializeField] private int _damageOnCollision;
 
+    public int CandiesEaten { get; private set; }
+
     private void Start()
     {
         _movable = GetComponent<Movable>();
         _currentHP = _maxHP;
+        CandiesEaten = 0;
     }
 
     public void OnCollision(GameObject obj)
@@ -50,5 +53,20 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
     public int CalculateDamage()
     {
         return _damageOnCollision;
+    }
+
+    public int MaxHP()
+    {
+        return _maxHP; 
+    }
+
+    public int CurrentHP()
+    {
+        return _currentHP; 
+    }
+
+    public void EatCandy()
+    {
+        CandiesEaten++;
     }
 }

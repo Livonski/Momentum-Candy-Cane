@@ -9,7 +9,9 @@ public class CandyCane : MonoBehaviour, ICollidable, IInitializable, IDestroyabl
     {
         if (obj.GetComponent<Vehicle>() == null)
             return;
-        Debug.Log("Candy eaten");
+
+        obj.GetComponent<Vehicle>().EatCandy();
+
         TurnManager.Instance.EnqueueDestruction(gameObject);
         gameObject.SetActive(false);
     }

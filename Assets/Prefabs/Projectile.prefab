@@ -4931,8 +4931,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movable: {fileID: 5249910776121602811}
-  _damage: 10
-  _maxVelocity: 5
+  _damage: 1
+  _maxVelocity: 3
 --- !u!114 &5249910776121602811
 MonoBehaviour:
   m_ObjectHideFlags: 0
