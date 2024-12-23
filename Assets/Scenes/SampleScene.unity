@@ -4796,7 +4796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minIntervalBetweenSFX: 0.1
   maxQueueSize: 5
-  targetVolume: 1
+  targetVolume: 0.3
 --- !u!4 &1444891745
 Transform:
   m_ObjectHideFlags: 0
@@ -5339,7 +5339,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 80000448cd465224dbee060a0394b953, type: 3}
   - {fileID: 8300000, guid: 88f1d3668db0ae8429e131e6c7e927af, type: 3}
   fadeDuration: 2
-  targetVolume: 1
+  targetVolume: 0.5
 --- !u!82 &1735780733
 AudioSource:
   m_ObjectHideFlags: 0
