@@ -3482,10 +3482,22 @@ MonoBehaviour:
   _objects:
   - obj: {fileID: 3082211143577698974, guid: d9a5791b1dd7f55408642ca0cfd47f1c, type: 3}
     initializationData:
-      GridPosition: {x: 5, y: 5}
+      GridPosition: {x: 20, y: 7}
       ID: 0
       DefaultName: Player
-      InitialSpeed: {x: 0, y: 0}
+      InitialSpeed: {x: -1, y: 0}
+  - obj: {fileID: 7084304300669874480, guid: 1b538604953d8784eb3c472cef5a605f, type: 3}
+    initializationData:
+      GridPosition: {x: 20, y: 3}
+      ID: 0
+      DefaultName: Grinch
+      InitialSpeed: {x: -3, y: 0}
+  - obj: {fileID: 1121445854268613783, guid: 997980c9756dd3144a6824954ec3825d, type: 3}
+    initializationData:
+      GridPosition: {x: 20, y: 5}
+      ID: 0
+      DefaultName: Pinguin
+      InitialSpeed: {x: -3, y: 0}
   _wallGameObject: {fileID: 7099740832360290325, guid: ddbe6e91af99fea448c4d23df404caac, type: 3}
 --- !u!4 &599510392
 Transform:
