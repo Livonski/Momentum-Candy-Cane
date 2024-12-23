@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movable: {fileID: 6051444320532938521}
-  _maxHP: 1
+  _maxHP: 5
   _currentHP: 0
   _damageOnCollision: 1
 --- !u!114 &5844267993621265547
