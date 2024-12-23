@@ -19,5 +19,6 @@ MonoBehaviour:
   - Type: 2
     Value: 0
     SpawnableGO: {fileID: 5141405141847280488, guid: f148507473a09214aa49ccf4051bb5b2, type: 3}
+  Rarity: 3
   Description: Shoots a snowball into enemies
   PlayClip: {fileID: 8300000, guid: fdf5bb77869005c44aa8ef909676cf8c, type: 3}

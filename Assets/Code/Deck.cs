@@ -15,14 +15,43 @@ public class Deck
     private void AssignDeck()
     {
         _cards.Clear();
+        List<Card> cardList = new List<Card>();
         foreach (var data in _avaliableCards)
         {
-            _cards.Enqueue(new Card(data));
+            for (int i = 0; i < data.Rarity; i++)
+            {
+                cardList.Add(new Card(data));
+            }
+        }
+
+        Shuffle(cardList);
+
+        foreach (var data in _cards)
+        {
+            Debug.Log(data);
+        }
+
+        foreach (var card in cardList)
+        {
+            _cards.Enqueue(card);
+        }
+    }
+
+    private void Shuffle(List<Card> cardList)
+    {
+        System.Random rnd = new System.Random();
+        for (int i = cardList.Count - 1; i > 0; i--)
+        {
+            int j = rnd.Next(i + 1);
+            Card temp = cardList[i];
+            cardList[i] = cardList[j];
+            cardList[j] = temp;
         }
     }
 
     public Card DrawCard()
     {
+        Debug.Log(_cards.Count);
         if(_cards.Count == 0)
             AssignDeck();
         return _cards.Dequeue();

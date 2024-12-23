@@ -9,6 +9,7 @@ public class CardData : ScriptableObject
     public Sprite CardImage;
     public int SpiritCost;
     public List<CardEffectData> Effects;
+    public int Rarity;
     public string Description;
     public AudioClip PlayClip;
 }

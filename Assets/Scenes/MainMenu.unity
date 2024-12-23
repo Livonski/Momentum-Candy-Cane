@@ -746,8 +746,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Game made for - Jame Gam Christmas Edition\nMade by Human Creatures Inc\nHuman
     Creature1 - 90% of Code, Game Design\nMidjourney - 70% of Art\nChatGPT - 30%
-    of Art, 10% of Code\nSunoAI - Music\nUsed assets:\nChristmas Whoosh_1 - DJARTMUSIC\r,\nCHRISTMAS
-    BELLS / SAMPLE / 85 BPM - CHAKONG\n\n"
+    of Art, 10% of Code\nSunoAI - Music\nUsed assets & tools:\nChristmas Whoosh_1
+    - DJARTMUSIC\r,\nCHRISTMAS BELLS / SAMPLE / 85 BPM - CHAKONG\nhttps://giventofly.github.io/pixelit/#tryit
+    - Converting AI art to pixelart\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5388f47015ec33a40aff99ad9ff76b36, type: 2}
   m_sharedMaterial: {fileID: -1216488277805982333, guid: 5388f47015ec33a40aff99ad9ff76b36, type: 2}
@@ -774,7 +775,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.85
+  m_fontSize: 38.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -19,5 +19,6 @@ MonoBehaviour:
   - Type: 1
     Value: 2
     SpawnableGO: {fileID: 0}
+  Rarity: 3
   Description: Turns you at 90 degree angle cancelling all momentum
   PlayClip: {fileID: 8300000, guid: fdf5bb77869005c44aa8ef909676cf8c, type: 3}

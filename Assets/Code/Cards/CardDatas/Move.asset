@@ -19,5 +19,6 @@ MonoBehaviour:
   - Type: 0
     Value: 2
     SpawnableGO: {fileID: 0}
+  Rarity: 7
   Description: Accelerate forward by 2 tiles
   PlayClip: {fileID: 8300000, guid: fdf5bb77869005c44aa8ef909676cf8c, type: 3}
