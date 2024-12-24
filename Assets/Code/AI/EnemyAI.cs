@@ -7,9 +7,11 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private int _christmasSpirit;
     [SerializeField] private Hand _hand;
     [SerializeField] private Movable _movable;
+    [SerializeField] private Vehicle _vehicle;
 
     [SerializeField] private float _moveWeight = 1.0f;
     [SerializeField] private float _attackWeight = 0.5f;
+    [SerializeField] private int _idealCardsAmount = 5;
 
     private Movable _playerMovable;
     private FinishLine _finishLine;
@@ -64,10 +66,10 @@ public class EnemyAI : MonoBehaviour
         turnSide = 0;
 
         //I'm assuming that finish line is accesible from the right
-        int distanceToFinish = _map.GetDistance(_movable._gridPosition + _movable.Forward, _finishLine.GridPosition + new Vector2Int(1,0));
-        Debug.Log($"{transform.name} distance to finish: {distanceToFinish}");
-
         int currentDistance = _map.GetDistance(_movable._gridPosition + _movable.Velocity(), _finishLine.GridPosition + new Vector2Int(1, 0));
+        bool isPathBlocked = _map.IsPathBlocked(_movable._gridPosition, _movable._gridPosition + _movable.Velocity());
+        currentDistance = isPathBlocked ? -1 : currentDistance;
+        Debug.Log($"{transform.name} distance to finish: {currentDistance}, position: {_movable._gridPosition}, velocity: {_movable.Velocity()}, path blocked: {isPathBlocked}");
 
         foreach (var card in cards)
         {
@@ -87,6 +89,9 @@ public class EnemyAI : MonoBehaviour
     private float EvaluateCard(Card card, int currentDistance, out float turnSide)
     {
         float positionWeight = 1f;
+        float drawValue = 0f;
+        float healValue = 0f;
+
         turnSide = 0f;
 
         //Evaluating moving forward/backward
@@ -118,7 +123,7 @@ public class EnemyAI : MonoBehaviour
 
             //right turn
             Vector2Int rightPosition = _movable.PredictPosition(0, 1, turnStrength);
-            int distanceRight = _map.GetDistance(leftPosition, _finishLine.GridPosition + new Vector2Int(1, 0));
+            int distanceRight = _map.GetDistance(rightPosition, _finishLine.GridPosition + new Vector2Int(1, 0));
 
             Debug.Log($"leftPosition: {leftPosition}, rightPosition: {rightPosition}, distanceLeft: {distanceLeft}, distanceRight: {distanceRight}, oldDistance: {currentDistance}");
 
@@ -126,26 +131,53 @@ public class EnemyAI : MonoBehaviour
             {
                 positionWeight = -10f; 
             }
-            else if (distanceLeft == -1 || distanceRight < distanceLeft)
+            else if (distanceLeft == -1 || (distanceRight < distanceLeft && distanceRight != -1))
             {
-                positionWeight = currentDistance / distanceRight;
+                //positionWeight = 1 - (float)currentDistance / (float)distanceRight;
+                positionWeight = 1 - (float)distanceRight / (float)currentDistance;
                 turnSide = 1;
             }
-            else if (distanceRight == -1 || distanceLeft < distanceRight)
+            else if (distanceRight == -1 || (distanceLeft < distanceRight && distanceLeft != -1))
             {
-                positionWeight = currentDistance / distanceRight;
+                //positionWeight = 1 - (float)currentDistance / (float)distanceRight;
+                positionWeight = 1 - (float)distanceLeft / (float)currentDistance;
                 turnSide = -1;
             }
             else
             {
-                positionWeight = currentDistance / distanceRight;
+                positionWeight = 1 - (float)distanceRight / (float)currentDistance;
                 turnSide = 1;
                 Debug.Log("Distance left == right?");
             }
         }
+        //Evaluating Healing
+        List<CardEffectData> healEffects = card.GetCardData().Effects.FindAll(e => e.Type == EffectType.Heal);
+        if (healEffects.Count > 0)
+        {
+            int totalHealAmount = 0;
+            foreach (var heal in healEffects)
+            {
+                totalHealAmount += heal.Value;
+            }
+            drawValue = totalHealAmount * (1 - _vehicle.CurrentHP() / _vehicle.MaxHP());
+        }
+
+
+        //Evaluating Drawing new card
+        List<CardEffectData> drawEffects = card.GetCardData().Effects.FindAll(e => e.Type == EffectType.DrawCards);
+        if(drawEffects.Count > 0)
+        {
+            int totalDrawAmount = 0;
+            foreach (var draw in drawEffects)
+            {
+                totalDrawAmount += draw.Value;
+            }
+            drawValue = totalDrawAmount * (1 - _hand.GetCards().Count / _idealCardsAmount);
+        }
+
 
         float result = card.GetCardData().MoveValue * _moveWeight * positionWeight +
-                       card.GetCardData().AttackValue * _attackWeight;
+                       card.GetCardData().AttackValue * _attackWeight + drawValue + healValue;
 
         return result;
     }

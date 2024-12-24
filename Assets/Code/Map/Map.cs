@@ -116,6 +116,56 @@ public class Map : MonoBehaviour
         return _map[position.x, position.y];
     }
 
+    public bool IsPathBlocked(Vector2Int start, Vector2Int end)
+    {
+        if(start == end)
+            return false;
+        int x0 = start.x;
+        int y0 = start.y;
+        int x1 = end.x;
+        int y1 = end.y;
+
+        int dx = Mathf.Abs(x1 - x0);
+        int dy = Mathf.Abs(y1 - y0);
+        int sx = (x0 < x1) ? 1 : -1;
+        int sy = (y0 < y1) ? 1 : -1;
+
+        int err = dx - dy;
+
+        while (true)
+        {
+            if (!(x0 == start.x && y0 == start.y))
+            {
+                if (IsInsideMap(new Vector2Int(x0, y0)))
+                {
+                    if (_map[x0, y0]._objects.Exists(obj => obj.GetComponent<IBlockable>() != null))
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            if (x0 == x1 && y0 == y1)
+                break;
+
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                x0 += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                y0 += sy;
+            }
+        }
+
+        return false;
+    }
+
     public int GetDistance(Vector2Int start, Vector2Int end)
     {
         if (!IsInsideMap(start) || !IsInsideMap(start))

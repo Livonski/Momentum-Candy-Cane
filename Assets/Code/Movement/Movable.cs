@@ -257,6 +257,8 @@ public class Movable : MonoBehaviour, IInitializable
         Vector2Int nextPosition = _gridPosition;
         Vector2Int newVelocity = _velocity;
 
+        Debug.Log($"accelerationChange:{accelerationChange}, directionChange:{directionChange}, numRotations:{numRotations}");
+
         if (directionChange == 0)
         {
             newVelocity = _velocity + Forward * accelerationChange;
@@ -277,6 +279,7 @@ public class Movable : MonoBehaviour, IInitializable
             }
             Vector2Int newForward = Directions[newIndex];
             newVelocity = 1 * newForward;
+            Debug.Log($"NewForward: {newForward}, newVelocity: {newVelocity}");
         }
 
         int x0 = _gridPosition.x;

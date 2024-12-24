@@ -136,6 +136,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _christmasSpirit: 3
   _hand: {fileID: 8125630106397763926}
+  _movable: {fileID: 0}
+  _vehicle: {fileID: 7928557627408915287}
+  _moveWeight: 1
+  _attackWeight: 0.5
+  _idealCardsAmount: 5
 --- !u!114 &8125630106397763926
 MonoBehaviour:
   m_ObjectHideFlags: 0
