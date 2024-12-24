@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7362843790736159844}
   - component: {fileID: 5911022601540733962}
   - component: {fileID: 7928557627408915287}
+  - component: {fileID: -8453146847018153810}
+  - component: {fileID: 8125630106397763926}
   m_Layer: 0
   m_Name: Pinguin
   m_TagString: Untagged
@@ -103,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _velocity: {x: 0, y: 0}
+  _priority: 0
 --- !u!114 &7928557627408915287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +122,43 @@ MonoBehaviour:
   _maxHP: 2
   _currentHP: 0
   _damageOnCollision: 1
+--- !u!114 &-8453146847018153810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121445854268613783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01712b0e996c0ef4fa13831ee48876ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _christmasSpirit: 3
+  _hand: {fileID: 8125630106397763926}
+--- !u!114 &8125630106397763926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121445854268613783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 609ee77eed8ced8488c836d1a3c13a1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _avaliableCards:
+  - {fileID: 11400000, guid: 62cd5c4319962fd408eff3bb83475ff3, type: 2}
+  - {fileID: 11400000, guid: b691559a7a3ed9441962a2748422f3f1, type: 2}
+  - {fileID: 11400000, guid: 1fa3cce997672c648b71ff64e04671f3, type: 2}
+  - {fileID: 11400000, guid: e5400b0c904afb0489503124431f6f37, type: 2}
+  - {fileID: 11400000, guid: 5560de8f50ac78543ab93ac848875975, type: 2}
+  - {fileID: 11400000, guid: 04604c91f3fee924a83c9a61bb5b3601, type: 2}
+  - {fileID: 11400000, guid: 7bb0b3fcd7c8bef4a99ad4f922f94816, type: 2}
+  - {fileID: 11400000, guid: c0c793fec16b5f84db39acb75df3f1f9, type: 2}
+  _initialChristmasSpirit: 3
+  _initialCards: 3
 --- !u!1 &1340212726261588008
 GameObject:
   m_ObjectHideFlags: 0

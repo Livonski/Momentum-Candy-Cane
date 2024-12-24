@@ -71,6 +71,9 @@ public class Vehicle : MonoBehaviour, ICollidable, IBlockable, IDestroyable, IDa
     public void OnRemove()
     {
         GameObject.FindGameObjectWithTag("Map").GetComponent<Map>().RemoveObject(gameObject, _movable._gridPosition);
+        TurnManager.Instance.RemoveMovable(_movable);
+        if(GetComponent<EnemyAI>() != null)
+            TurnManager.Instance.RemoveAI(GetComponent<EnemyAI>());
         Destroy(gameObject);
     }
 

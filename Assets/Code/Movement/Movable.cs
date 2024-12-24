@@ -69,13 +69,13 @@ public class Movable : MonoBehaviour, IInitializable
 
     public void AccelerateForward(int velocity)
     {
-        Debug.Log($"Accelerating forward by {velocity}");
+        //Debug.Log($"Accelerating forward by {velocity}");
         Vector2Int acceleration = Forward * velocity;
         AddVelocity(acceleration);
     }
     public void AccelerateBackward(int velocity)
     {
-        Debug.Log($"Accelerating backward by {velocity}");
+        //Debug.Log($"Accelerating backward by {velocity}");
         Vector2Int acceleration = Forward * -velocity;
         _velocity += acceleration;
     }
@@ -101,10 +101,11 @@ public class Movable : MonoBehaviour, IInitializable
         RotateToForward();
     }
 
+    //Why this exists?
     public void Move()
     {
         Vector2Int nextPosition = _gridPosition + _velocity;
-        Debug.Log($"Executing move, next position: {nextPosition}");
+        //Debug.Log($"Executing move, next position: {nextPosition}");
         MoveTo(nextPosition);
     }
 
@@ -148,7 +149,7 @@ public class Movable : MonoBehaviour, IInitializable
         while (remainingPoints > 0 && _moveQueue.Count > 0)
         {
             Vector2Int nextPoint = _moveQueue.Dequeue();
-            Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
+            //Debug.Log($"Dequeuing point {nextPoint}, remaining points: {remainingPoints}");
 
             yield return StartCoroutine(MoveTo(nextPoint));
 
@@ -185,7 +186,7 @@ public class Movable : MonoBehaviour, IInitializable
             {
                 _moveQueue.Enqueue(new Vector2Int(x0, y0));
                 movePoints++;
-                Debug.Log($"Queueing new point at {x0}:{y0}");
+                //Debug.Log($"Queueing new point at {x0}:{y0}");
             }
 
             if (x0 == x1 && y0 == y1)
@@ -225,8 +226,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         while (true)
         {
-           movePoints.Add(new Vector2Int(x0, y0));
-
+            movePoints.Add(new Vector2Int(x0, y0));
             if (x0 == x1 && y0 == y1)
                 break;
 

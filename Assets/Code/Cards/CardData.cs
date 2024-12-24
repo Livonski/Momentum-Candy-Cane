@@ -12,4 +12,7 @@ public class CardData : ScriptableObject
     public int Rarity;
     public string Description;
     public AudioClip PlayClip;
+
+    public float AttackValue;
+    public float MoveValue;
 }

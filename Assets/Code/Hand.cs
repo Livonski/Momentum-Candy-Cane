@@ -7,6 +7,7 @@ public class Hand : MonoBehaviour
 {
     [SerializeField] private List<CardData> _avaliableCards;
     [SerializeField] private int _initialChristmasSpirit;
+    [SerializeField] private int _initialCards;
     public int _christmasSpirit { get; private set; }
     public event Action<List<Card>> OnHandChanged;
 
@@ -23,6 +24,7 @@ public class Hand : MonoBehaviour
 
         _deck = new Deck(_avaliableCards);
         _christmasSpirit = _initialChristmasSpirit;
+        DrawCards(_initialCards);
     }
 
     public List<Card> GetCards()
@@ -68,6 +70,21 @@ public class Hand : MonoBehaviour
         return playedCard;
     }
 
+    public bool PlayCard(Card card, AdditionalContext additionalContext)
+    {
+        CardContext cardContext = _context;
+        cardContext._target = additionalContext.ShootingTarget;
+        cardContext._turnDirection = additionalContext.TurnSide;
+        if (!_hand.Contains(card)) return false;
+        bool playedCard = card.PlayCard(_context);
+        if (playedCard)
+        {
+            _hand.Remove(card);
+            OnHandChanged?.Invoke(_hand);
+        }
+        return playedCard;
+    }
+
     public void DecreaseChristmasSpirit(int amount)
     {
         if (_christmasSpirit - amount < 0)
@@ -78,5 +95,11 @@ public class Hand : MonoBehaviour
     public void IncreaseChristmasSpirit(int amount)
     {
         _christmasSpirit += amount;
+    }
+
+    public void EnableAI()
+    {
+        //_context ??= new CardContext(movable, this, vehicle);
+        _context._AI = true;
     }
 }

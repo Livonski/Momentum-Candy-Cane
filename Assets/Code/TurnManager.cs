@@ -17,6 +17,8 @@ public class TurnManager : MonoBehaviour
     private int _currentSubturn;
     private bool _processingTurn;
 
+    private List<EnemyAI> _AIs;
+
     private Queue<GameObject> _destructionQueue;
 
     private void OnLevelWasLoaded(int level)
@@ -32,7 +34,30 @@ public class TurnManager : MonoBehaviour
         _movables ??= new List<MovableData>();
         MovableData newMovable = new MovableData(movable, priority);
         _movables.Add(newMovable);
-        Debug.Log("Adding new movable");
+        //Debug.Log("Adding new movable");
+    }
+
+    public void RemoveMovable(Movable movable)
+    {
+        int movableIndex = 0;
+        for (int i = 0; i < _movables.Count; i++)
+        {
+            if (_movables[i].Movable == movable)
+                movableIndex = i;
+        }
+        _movables.RemoveAt(movableIndex);
+    }
+
+    public void AddAI(EnemyAI AI)
+    {
+        _AIs ??= new List<EnemyAI>();
+        _AIs.Add(AI);
+        //Debug.Log("Adding new AI");
+    }
+
+    public void RemoveAI(EnemyAI AI)
+    {
+        _AIs.Remove(AI);
     }
 
     public float CurrentMoveDelay()
@@ -52,6 +77,7 @@ public class TurnManager : MonoBehaviour
     public IEnumerator ExecuteTurn()
     {
         //TODO move some things into their own methods
+        CalculateAIActions();
 
         _minMovePoints = int.MaxValue;
         _currentSubturn = 0;
@@ -64,10 +90,10 @@ public class TurnManager : MonoBehaviour
             MovableData newMovable = new MovableData(_movables[i].Movable, _movables[i].Priority, movePoints);
             _minMovePoints = Mathf.Min(_minMovePoints, movePoints);
             _movables[i] = newMovable;
-            Debug.Log($"Movable {i}, move points: {movePoints}");
+            //Debug.Log($"Movable {i}, move points: {movePoints}");
         }
 
-        Debug.Log($"Min move points: {_minMovePoints}");
+        //Debug.Log($"Min move points: {_minMovePoints}");
         _minMovePoints = Mathf.Max(_minMovePoints, 1);
         for(int i = 0; i < _movables.Count; i++)
         {
@@ -77,7 +103,7 @@ public class TurnManager : MonoBehaviour
             MovableData newMovable = _movables[i];
             newMovable.NumberOfMoves = numberOfMoves;
             _movables[i] = newMovable;
-            Debug.Log($"Movable {i}, number of moves: {numberOfMoves}");
+            //Debug.Log($"Movable {i}, number of moves: {numberOfMoves}");
         }
 
         _movables.Sort((a,b) => b.Priority.CompareTo(a.Priority));
@@ -87,7 +113,7 @@ public class TurnManager : MonoBehaviour
 
         for (int i = 0; i < _minMovePoints; i++)
         {
-            Debug.Log($"Sub-turn {i}");
+            //Debug.Log($"Sub-turn {i}");
             foreach(var moveData in _movables)
             {
                 yield return StartCoroutine(moveData.Movable.MoveBy(moveData.NumberOfMoves));
@@ -97,11 +123,13 @@ public class TurnManager : MonoBehaviour
         PredictMovements();
 
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().OnNewTurn();
+        AIOnNewTurn();
         _processingTurn = false;
     }
 
     public void NextSubturn()
     {
+        //This needs to be fixed
         _currentSubturn++;
         if(_currentSubturn > _minMovePoints)
         {
@@ -110,7 +138,7 @@ public class TurnManager : MonoBehaviour
         }
         foreach (var moveData in _movables)
         {
-            Debug.Log($"Executing movable, number of moves: {moveData.NumberOfMoves}");
+            //Debug.Log($"Executing movable, number of moves: {moveData.NumberOfMoves}");
             moveData.Movable.MoveBy(moveData.NumberOfMoves);
         }
         DestroyObjects();
@@ -128,6 +156,22 @@ public class TurnManager : MonoBehaviour
             return;
         while (_destructionQueue.Count > 0)
             _destructionQueue.Dequeue().GetComponent<IDestroyable>().OnRemove();
+    }
+
+    private void CalculateAIActions()
+    {
+        foreach (var AI in _AIs)
+        {
+            AI.TakeTurn();
+        }
+    }
+
+    private void AIOnNewTurn()
+    {
+        foreach(var AI in _AIs) 
+        {
+            AI.OnNewTurn();
+        }
     }
 
     public void PredictMovements()
