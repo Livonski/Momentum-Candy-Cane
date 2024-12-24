@@ -27,10 +27,10 @@ public class TurnManager : MonoBehaviour
         _processingTurn = false;
     }
 
-    public void AddMovable(Movable movable)
+    public void AddMovable(Movable movable, int priority)
     {
         _movables ??= new List<MovableData>();
-        MovableData newMovable = new MovableData(movable);
+        MovableData newMovable = new MovableData(movable, priority);
         _movables.Add(newMovable);
         Debug.Log("Adding new movable");
     }
@@ -61,7 +61,7 @@ public class TurnManager : MonoBehaviour
             int movePoints = _movables[i].Movable.CalculateMovePoints();
 
             //I hate lists +this is ugly
-            MovableData newMovable = new MovableData(_movables[i].Movable, movePoints);
+            MovableData newMovable = new MovableData(_movables[i].Movable, _movables[i].Priority, movePoints);
             _minMovePoints = Mathf.Min(_minMovePoints, movePoints);
             _movables[i] = newMovable;
             Debug.Log($"Movable {i}, move points: {movePoints}");
@@ -79,6 +79,8 @@ public class TurnManager : MonoBehaviour
             _movables[i] = newMovable;
             Debug.Log($"Movable {i}, number of moves: {numberOfMoves}");
         }
+
+        _movables.Sort((a,b) => b.Priority.CompareTo(a.Priority));
 
         if(_manualSubTurns)
             yield return null;
@@ -156,13 +158,15 @@ public class TurnManager : MonoBehaviour
     private struct MovableData
     {
         public Movable Movable;
+        public int Priority;
         public int MovePoints;
         public int RemainigMovePoints;
         public int NumberOfMoves;
 
-        public MovableData(Movable movable, int movePoints = 0, int numberOfMoves = 0)
+        public MovableData(Movable movable, int priority = 0, int movePoints = 0, int numberOfMoves = 0)
         {
             Movable = movable;
+            Priority = priority;
             MovePoints = movePoints;
             RemainigMovePoints = 0;
             NumberOfMoves = numberOfMoves;

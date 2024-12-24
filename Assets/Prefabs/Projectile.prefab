@@ -4946,6 +4946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _velocity: {x: 0, y: 0}
+  _priority: 1
 --- !u!1 &6150274178614845840
 GameObject:
   m_ObjectHideFlags: 0

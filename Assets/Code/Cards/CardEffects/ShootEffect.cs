@@ -14,6 +14,7 @@ public class ShootEffect : ICardEffect
     {
         if (context == null)
             return;
+
         context.AwaitPositionChoice((position) =>
         {
             Vector2Int projectileVelocity = _projectile.GetComponent<Projectile>().CalculateVelocity(context._movable._gridPosition, position, out Vector2Int projectilePosition);
@@ -21,6 +22,6 @@ public class ShootEffect : ICardEffect
             Debug.Log($"Projectile shooter position: {context._movable._gridPosition}, projectile velocity: {projectileVelocity}, projectile initial position: {projectilePosition}");
             GameObject.FindGameObjectWithTag("Map").GetComponent<Map>().SpawnObject(_projectile, projectileData);
             TurnManager.Instance.PredictMovements();
-        });
+        }, context._movable._gridPosition);
     }
 }

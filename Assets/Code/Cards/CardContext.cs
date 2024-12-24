@@ -13,9 +13,9 @@ public class CardContext
         UIRequestManager.Instance.RequestDirectionChoice(onChosen, playerPosition, forward);
     }
 
-    public void AwaitPositionChoice(Action<Vector2Int> onChosen)
+    public void AwaitPositionChoice(Action<Vector2Int> onChosen, Vector2Int gridPosition)
     {
-        UIRequestManager.Instance.RequestPositionChoise(onChosen);
+        UIRequestManager.Instance.RequestPositionChoise(onChosen, gridPosition);
     }
 
     public CardContext(Movable movable, Hand hand, Vehicle vehicle)

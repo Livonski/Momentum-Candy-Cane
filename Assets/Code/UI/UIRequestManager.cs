@@ -31,10 +31,10 @@ public class UIRequestManager : MonoBehaviour
         StartCoroutine(WaitForClickAndDecideDirection(playerPosition, forward));
     }
 
-    public void RequestPositionChoise(Action<Vector2Int> onChosen)
+    public void RequestPositionChoise(Action<Vector2Int> onChosen, Vector2Int gridPosition)
     {
         _positionCallback = onChosen;
-        StartCoroutine(WaitForClickAndDecidePosition());
+        StartCoroutine(WaitForClickAndDecidePosition(gridPosition));
     }
 
     private IEnumerator WaitForClickAndDecideDirection(Vector2 playerPosition, Vector2Int forward)
@@ -56,7 +56,7 @@ public class UIRequestManager : MonoBehaviour
         _rightHighlightArea.StopListening();
     }
 
-    private IEnumerator WaitForClickAndDecidePosition()
+    private IEnumerator WaitForClickAndDecidePosition(Vector2Int gridPosition)
     {
         bool walidPosition = false;
         while(!walidPosition)
@@ -66,7 +66,7 @@ public class UIRequestManager : MonoBehaviour
             Vector2Int choosenPosition = Vector2Int.one;
             Vector3 worldClickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Map map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
-            if (map.IsInsideMap(worldClickPos))
+            if (map.IsInsideMap(worldClickPos) && map.WorldToMapPosition(worldClickPos) != gridPosition)
             {
                 choosenPosition = map.WorldToMapPosition(worldClickPos);
                 _positionCallback.Invoke(choosenPosition);

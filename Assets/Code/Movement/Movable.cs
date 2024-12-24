@@ -10,6 +10,7 @@ public class Movable : MonoBehaviour, IInitializable
     public int Momentum { get; private set; }
 
     [SerializeField] private Vector2Int _velocity;
+    [SerializeField] private int _priority = 0;
 
     private float _moveDelay;
     private Map _map;
@@ -37,7 +38,7 @@ public class Movable : MonoBehaviour, IInitializable
         _map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
         _collidable = GetComponent<ICollidable>();
 
-        TurnManager.Instance.AddMovable(this);
+        TurnManager.Instance.AddMovable(this, _priority);
         _moveDelay = TurnManager.Instance.CurrentMoveDelay();
 
         _moveQueue = new Queue<Vector2Int>();

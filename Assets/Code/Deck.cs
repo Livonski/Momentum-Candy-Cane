@@ -26,11 +26,6 @@ public class Deck
 
         Shuffle(cardList);
 
-        foreach (var data in _cards)
-        {
-            Debug.Log(data);
-        }
-
         foreach (var card in cardList)
         {
             _cards.Enqueue(card);
@@ -51,7 +46,6 @@ public class Deck
 
     public Card DrawCard()
     {
-        Debug.Log(_cards.Count);
         if(_cards.Count == 0)
             AssignDeck();
         return _cards.Dequeue();
