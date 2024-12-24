@@ -72,7 +72,6 @@ public class Movable : MonoBehaviour, IInitializable
         return _velocity;
     }
 
-
     public void AccelerateForward(int velocity)
     {
         //Debug.Log($"Accelerating forward by {velocity}");

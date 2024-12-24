@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private float _moveWeight = 1.0f;
     [SerializeField] private float _attackWeight = 0.5f;
+    [SerializeField] private float _newCardScoreIncrement = 0.5f;
     [SerializeField] private int _idealCardsAmount = 5;
 
     private Movable _playerMovable;
@@ -37,10 +39,11 @@ public class EnemyAI : MonoBehaviour
         _playerMovable ??= GameObject.FindGameObjectWithTag("Player").GetComponent<Movable>();
 
         float turnSide = 0;
+        float minValue = 0;
 
-        Card bestCard = ChooseBestCard(playableCards, out turnSide);
+        Card bestCard = ChooseBestCard(playableCards, minValue, out turnSide);
 
-        if (bestCard != null)
+        while(bestCard != null && _christmasSpirit > 0 && _hand.GetCards().Count > 0)
         {
             _christmasSpirit -= bestCard.GetCardData().SpiritCost;
             Debug.Log($"{transform.name} thinks best card is {bestCard.GetCardData().CardName}, Remainig christmas spirit: {_christmasSpirit}");
@@ -49,6 +52,9 @@ public class EnemyAI : MonoBehaviour
             AdditionalContext additionalContext = new AdditionalContext(_playerMovable._gridPosition, direction);
 
             _hand.PlayCard(bestCard, additionalContext);
+
+            minValue += _newCardScoreIncrement;
+            bestCard = ChooseBestCard(playableCards, minValue, out turnSide);
         }
     }
 
@@ -59,11 +65,11 @@ public class EnemyAI : MonoBehaviour
         _christmasSpirit++;
     }
 
-    private Card ChooseBestCard(List<Card> cards, out float turnSide)
+    private Card ChooseBestCard(List<Card> cards, float minValue, out float bestTurnSide)
     {
         Card bestCard = null;
-        float bestValue = 0f;
-        turnSide = 0;
+        float bestValue = minValue;
+        bestTurnSide = 0;
 
         //I'm assuming that finish line is accesible from the right
         int currentDistance = _map.GetDistance(_movable._gridPosition + _movable.Velocity(), _finishLine.GridPosition + new Vector2Int(1, 0));
@@ -73,7 +79,7 @@ public class EnemyAI : MonoBehaviour
 
         foreach (var card in cards)
         {
-            float value = EvaluateCard(card, currentDistance, out turnSide);
+            float value = EvaluateCard(card, currentDistance, out float turnSide);
             Debug.Log($"{transform.name} thinks that {card.GetCardData().CardName} has {value} score");
 
 
@@ -81,6 +87,8 @@ public class EnemyAI : MonoBehaviour
             {
                 bestValue = value;
                 bestCard = card;
+                if(turnSide != 0)
+                    bestTurnSide = turnSide;
             }
         }
         return bestCard;
@@ -136,15 +144,18 @@ public class EnemyAI : MonoBehaviour
             {
                 positionWeight = -10f; 
             }
-            else if (distanceLeft == -1 || (distanceRight < distanceLeft && distanceRight != -1))
+            else if (distanceLeft == -1 || (distanceRight < distanceLeft && distanceRight != -1 && !isRightPathBlocked))
             {
-                //positionWeight = 1 - (float)currentDistance / (float)distanceRight;
                 positionWeight = 1 - (float)distanceRight / (float)currentDistance;
                 turnSide = 1;
             }
-            else if (distanceRight == -1 || (distanceLeft < distanceRight && distanceLeft != -1))
+            else if (distanceRight == -1 || (distanceLeft < distanceRight && distanceLeft != -1 && !isRightPathBlocked))
             {
-                //positionWeight = 1 - (float)currentDistance / (float)distanceRight;
+                positionWeight = 1 - (float)distanceLeft / (float)currentDistance;
+                turnSide = -1;
+            }
+            else if (isRightPathBlocked)
+            {
                 positionWeight = 1 - (float)distanceLeft / (float)currentDistance;
                 turnSide = -1;
             }
@@ -152,7 +163,7 @@ public class EnemyAI : MonoBehaviour
             {
                 positionWeight = 1 - (float)distanceRight / (float)currentDistance;
                 turnSide = 1;
-                Debug.Log("Distance left == right?");
+                //Debug.Log("Distance left == right?");
             }
         }
         //Evaluating Healing
@@ -173,7 +184,9 @@ public class EnemyAI : MonoBehaviour
             bool targetReachable = true;
             foreach (var shoot in shootEffects)
             {
-                Vector2Int direction = _movable._gridPosition - _movable.CalculateMovement()[1];
+                int dirX = (int)Mathf.Sign((float)_playerMovable._gridPosition.x - (float)_movable._gridPosition.x);
+                int dirY = (int)Mathf.Sign((float)_playerMovable._gridPosition.y - (float)_movable._gridPosition.y);
+                Vector2Int direction = new Vector2Int(dirX, dirY);
                 Debug.Log($"Direction: {direction}, ShooterPos: {_movable._gridPosition}, TargetPos: {_playerMovable._gridPosition}");
                 if(_map.IsPathBlocked(_movable._gridPosition + direction, _playerMovable._gridPosition - direction))
                     targetReachable = false;
