@@ -34,6 +34,7 @@ public class EnemyAI : MonoBehaviour
     public void TakeTurn()
     {
         List<Card> playableCards = _hand.GetCards().FindAll(c => c.GetCardData().SpiritCost <= _christmasSpirit);
+        _playerMovable ??= GameObject.FindGameObjectWithTag("Player").GetComponent<Movable>();
 
         float turnSide = 0;
 
@@ -43,7 +44,6 @@ public class EnemyAI : MonoBehaviour
         {
             _christmasSpirit -= bestCard.GetCardData().SpiritCost;
             Debug.Log($"{transform.name} thinks best card is {bestCard.GetCardData().CardName}, Remainig christmas spirit: {_christmasSpirit}");
-            _playerMovable ??= GameObject.FindGameObjectWithTag("Player").GetComponent<Movable>();
 
             TurnDirection direction = turnSide == 0 ? TurnDirection.None : (turnSide == -1 ? TurnDirection.Left : TurnDirection.Right);
             AdditionalContext additionalContext = new AdditionalContext(_playerMovable._gridPosition, direction);
@@ -89,6 +89,7 @@ public class EnemyAI : MonoBehaviour
     private float EvaluateCard(Card card, int currentDistance, out float turnSide)
     {
         float positionWeight = 1f;
+        float reachableTargerWeight = 1f;
         float drawValue = 0f;
         float healValue = 0f;
 
@@ -105,8 +106,10 @@ public class EnemyAI : MonoBehaviour
             }
             Vector2Int positionAfterEffect = _movable.PredictPosition(acceleration, 0, 0);
             int newDistance = _map.GetDistance(positionAfterEffect, _finishLine.GridPosition + new Vector2Int(1, 0));
-            Debug.Log($"positionAfterEffect: {positionAfterEffect} newDistance: {newDistance}, oldDistance: {currentDistance}");
+            bool isPathBlocked = _map.IsPathBlocked(_movable._gridPosition, positionAfterEffect);
+            Debug.Log($"positionAfterEffect: {positionAfterEffect} newDistance: {newDistance}, oldDistance: {currentDistance}, isPathBlocked: {isPathBlocked}");
             positionWeight = newDistance == -1 ? -10f : currentDistance / newDistance;
+            positionWeight = isPathBlocked ? -1 : positionWeight;
         }
         //Evaluating turning
         List<CardEffectData> turnEffects = card.GetCardData().Effects.FindAll(e => e.Type == EffectType.Turn);
@@ -120,12 +123,14 @@ public class EnemyAI : MonoBehaviour
             //left turn
             Vector2Int leftPosition = _movable.PredictPosition(0, -1, turnStrength);
             int distanceLeft = _map.GetDistance(leftPosition, _finishLine.GridPosition + new Vector2Int(1, 0));
+            bool isLeftPathBlocked = _map.IsPathBlocked(_movable._gridPosition, leftPosition);
 
             //right turn
             Vector2Int rightPosition = _movable.PredictPosition(0, 1, turnStrength);
             int distanceRight = _map.GetDistance(rightPosition, _finishLine.GridPosition + new Vector2Int(1, 0));
+            bool isRightPathBlocked = _map.IsPathBlocked(_movable._gridPosition, rightPosition);
 
-            Debug.Log($"leftPosition: {leftPosition}, rightPosition: {rightPosition}, distanceLeft: {distanceLeft}, distanceRight: {distanceRight}, oldDistance: {currentDistance}");
+            Debug.Log($"leftPosition: {leftPosition}, rightPosition: {rightPosition}, distanceLeft: {distanceLeft}, distanceRight: {distanceRight}, oldDistance: {currentDistance}, isLeftPathBlocked: {isLeftPathBlocked}, isRightPathBlocked: {isRightPathBlocked}");
 
             if(distanceLeft == -1 && distanceRight == -1)
             {
@@ -161,7 +166,20 @@ public class EnemyAI : MonoBehaviour
             }
             drawValue = totalHealAmount * (1 - _vehicle.CurrentHP() / _vehicle.MaxHP());
         }
-
+        //Evaluating Shooting
+        List<CardEffectData> shootEffects = card.GetCardData().Effects.FindAll(e => e.Type == EffectType.Shoot);
+        if(shootEffects.Count > 0)
+        {
+            bool targetReachable = true;
+            foreach (var shoot in shootEffects)
+            {
+                Vector2Int direction = _movable._gridPosition - _movable.CalculateMovement()[1];
+                Debug.Log($"Direction: {direction}, ShooterPos: {_movable._gridPosition}, TargetPos: {_playerMovable._gridPosition}");
+                if(_map.IsPathBlocked(_movable._gridPosition + direction, _playerMovable._gridPosition - direction))
+                    targetReachable = false;
+            }
+            reachableTargerWeight = targetReachable ? 1 : 0;
+        }
 
         //Evaluating Drawing new card
         List<CardEffectData> drawEffects = card.GetCardData().Effects.FindAll(e => e.Type == EffectType.DrawCards);
@@ -177,7 +195,7 @@ public class EnemyAI : MonoBehaviour
 
 
         float result = card.GetCardData().MoveValue * _moveWeight * positionWeight +
-                       card.GetCardData().AttackValue * _attackWeight + drawValue + healValue;
+                       card.GetCardData().AttackValue * _attackWeight * reachableTargerWeight + drawValue + healValue;
 
         return result;
     }

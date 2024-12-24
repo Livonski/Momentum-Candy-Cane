@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
@@ -22,18 +23,19 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _candyGameObject;
     private List<Vector2Int> _candiesPositions;
 
-    private void Start()
+    private IEnumerator Start()
     {
         if (_map == null)
             _map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
         _map.GenerateMap();
 
-        LoadWallData();
-        LoadCandiesData();
+        yield return StartCoroutine(LoadWallData());
+        yield return StartCoroutine(LoadCandiesData());
         SpawnWalls();
         SpawnCandies();
         SpawnObjects();
         DrawInitialCards();
+        yield return null;
     }
 
     public void OnPlayerKilled(int totalCandiesEaten)
@@ -52,36 +54,108 @@ public class GameController : MonoBehaviour
         _totalCrossedLine++;
     }
 
-    private void LoadWallData()
+    private IEnumerator LoadWallData()
     {
-        string path = Path.Combine(Application.dataPath, "walls.json");
-        if (File.Exists(path))
+        if(Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            string json = File.ReadAllText(path);
-            var wallDataWrapper = JsonUtility.FromJson<WallDataWrapper>(json);
-            _wallPositions = wallDataWrapper.WallPositions;
+            //Normal human thing
+            string path = Path.Combine(Application.dataPath, "walls.json");
+            if (File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+                var wallDataWrapper = JsonUtility.FromJson<WallDataWrapper>(json);
+                _wallPositions = wallDataWrapper.WallPositions;
+            }
+            else
+            {
+                Debug.LogError("File walls.json not found");
+                _wallPositions = new List<Vector2Int>();
+            }
+            yield return null;
         }
         else
         {
-            Debug.LogError("File walls.json not found");
-            _wallPositions = new List<Vector2Int>();
+            //WEB nonsence
+
+            string filePath = Path.Combine(Application.streamingAssetsPath, "walls.json");
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(filePath))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    string jsonContent = webRequest.downloadHandler.text;
+                    var wallDataWrapper = JsonUtility.FromJson<WallDataWrapper>(jsonContent);
+                    _wallPositions = wallDataWrapper.WallPositions;
+                }
+                else
+                {
+                    Debug.LogError("Error loading JSON: " + webRequest.error);
+                }
+            }
         }
     }
 
-    private void LoadCandiesData()
+    private IEnumerator LoadCandiesData()
     {
-        string path = Path.Combine(Application.dataPath, "candies.json");
-        if (File.Exists(path))
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            string json = File.ReadAllText(path);
-            var candyDataWrapper = JsonUtility.FromJson<CandyDataWrapper>(json);
-            _candiesPositions = candyDataWrapper.CandyPositions;
+            //Normal human thing
+            string path = Path.Combine(Application.dataPath, "candies.json");
+            if (File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+                var candyDataWrapper = JsonUtility.FromJson<CandyDataWrapper>(json);
+                _candiesPositions = candyDataWrapper.CandyPositions;
+            }
+            else
+            {
+                Debug.LogError("File candies.json not found");
+                _wallPositions = new List<Vector2Int>();
+            }
+            yield return null;
         }
         else
         {
-            Debug.LogError("File candies.json not found");
-            _wallPositions = new List<Vector2Int>();
+            //WEB nonsence
+            string filePath = Path.Combine(Application.streamingAssetsPath, "candies.json");
+
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(filePath))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    string jsonContent = webRequest.downloadHandler.text;
+                    var candyDataWrapper = JsonUtility.FromJson<CandyDataWrapper>(jsonContent);
+                    _candiesPositions = candyDataWrapper.CandyPositions;
+                }
+                else
+                {
+                    Debug.LogError("Error loading JSON: " + webRequest.error);
+                }
+            }
         }
+
+        //WEB nonsence
+        /*string filePath = Path.Combine(Application.streamingAssetsPath, "candies.json");
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(filePath))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                string jsonContent = webRequest.downloadHandler.text;
+                var candyDataWrapper = JsonUtility.FromJson<CandyDataWrapper>(jsonContent);
+                _candiesPositions = candyDataWrapper.CandyPositions;
+            }
+            else
+            {
+                Debug.LogError("Error loading JSON: " + webRequest.error);
+            }
+        }*/
     }
 
     private void SpawnWalls()

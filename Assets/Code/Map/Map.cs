@@ -138,7 +138,7 @@ public class Map : MonoBehaviour
             {
                 if (IsInsideMap(new Vector2Int(x0, y0)))
                 {
-                    if (_map[x0, y0]._objects.Exists(obj => obj.GetComponent<IBlockable>() != null))
+                    if (_map[x0, y0]._objects.Exists(obj => obj.GetComponent<IBlockable>() != null) && !_map[x0, y0]._objects.Exists(obj => obj.GetComponent<FinishLine>() != null))
                         return true;
                 }
                 else

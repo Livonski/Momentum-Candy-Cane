@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
         //I'm making an assuption that only one HandView exists on scene, let's hope it's true
         _handView = FindAnyObjectByType<HandView>();
         //This is bad, but I can live with that
-        _drawCardButton = GameObject.Find("DrawCardButton").GetComponent<Button>();
+        //_drawCardButton = GameObject.Find("DrawCardButton").GetComponent<Button>();
 
         if (_hand != null && _handView != null)
         {
