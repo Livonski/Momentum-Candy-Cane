@@ -45,7 +45,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         Momentum = 0;
 
-        if(_velocity != Vector2Int.zero)
+        if (_velocity != Vector2Int.zero)
         {
             RecalculateForward();
         }
@@ -58,7 +58,7 @@ public class Movable : MonoBehaviour, IInitializable
 
     public void AddVelocity(Vector2Int velocity)
     {
-        if(velocity == null)
+        if (velocity == null)
         {
             Debug.LogWarning($"Trying to add null velocity to {transform.name}");
             return;
@@ -66,6 +66,12 @@ public class Movable : MonoBehaviour, IInitializable
         _velocity += velocity;
         RecalculateForward();
     }
+
+    public Vector2Int Velocity()
+    {
+        return _velocity;
+    }
+
 
     public void AccelerateForward(int velocity)
     {
@@ -93,7 +99,7 @@ public class Movable : MonoBehaviour, IInitializable
         int newIndex = (currentIndex + delta) % Directions.Count;
         if (newIndex < 0)
         {
-            newIndex += Directions.Count; 
+            newIndex += Directions.Count;
         }
 
         Forward = Directions[newIndex];
@@ -115,7 +121,7 @@ public class Movable : MonoBehaviour, IInitializable
         bool blocked = false;
         foreach (GameObject obj in objectsInTile)
         {
-            if(obj.GetComponent<IBlockable>() != null)
+            if (obj.GetComponent<IBlockable>() != null)
             {
                 _collidable.OnCollision(obj);
                 blocked = true;
@@ -123,13 +129,13 @@ public class Movable : MonoBehaviour, IInitializable
             obj.GetComponent<ICollidable>()?.OnCollision(gameObject);
         }
 
-        if (blocked) 
+        if (blocked)
             yield break;
 
         if (_map.IsInsideMap(position))
         {
             Vector3 currentPosition = transform.position;
-            Vector3 nextPosition = _map.MapToWorldPosition(position) + new Vector3(0,0,-1);
+            Vector3 nextPosition = _map.MapToWorldPosition(position) + new Vector3(0, 0, -1);
 
             _map.MoveObject(gameObject, _gridPosition, position);
             _gridPosition = position;
@@ -141,7 +147,7 @@ public class Movable : MonoBehaviour, IInitializable
 
     public IEnumerator MoveBy(int points)
     {
-        if(_moveQueue.Count == 0)
+        if (_moveQueue.Count == 0)
             yield break;
 
         int remainingPoints = points;
@@ -182,7 +188,7 @@ public class Movable : MonoBehaviour, IInitializable
 
         while (true)
         {
-            if(!(x0 == _gridPosition.x && y0 == _gridPosition.y))
+            if (!(x0 == _gridPosition.x && y0 == _gridPosition.y))
             {
                 _moveQueue.Enqueue(new Vector2Int(x0, y0));
                 movePoints++;
@@ -244,6 +250,66 @@ public class Movable : MonoBehaviour, IInitializable
         }
         Momentum = movePoints.Count - 1;
         return movePoints;
+    }
+
+    public Vector2Int PredictPosition(int accelerationChange, int directionChange, int numRotations)
+    {
+        Vector2Int nextPosition = _gridPosition;
+        Vector2Int newVelocity = _velocity;
+
+        if (directionChange == 0)
+        {
+            newVelocity = _velocity + Forward * accelerationChange;
+        }
+        else
+        {
+            int currentIndex = Directions.IndexOf(Forward);
+            if (currentIndex < 0)
+            {
+                Debug.LogWarning("Forward not found in directions list.");
+            }
+
+            int delta = (directionChange == 1) ? numRotations : -numRotations;
+            int newIndex = (currentIndex + delta) % Directions.Count;
+            if (newIndex < 0)
+            {
+                newIndex += Directions.Count;
+            }
+            Vector2Int newForward = Directions[newIndex];
+            newVelocity = 1 * newForward;
+        }
+
+        int x0 = _gridPosition.x;
+        int y0 = _gridPosition.y;
+        int x1 = _gridPosition.x + newVelocity.x;
+        int y1 = _gridPosition.y + newVelocity.y;
+
+        int dx = Mathf.Abs(x1 - x0);
+        int dy = Mathf.Abs(y1 - y0);
+        int sx = (x0 < x1) ? 1 : -1;
+        int sy = (y0 < y1) ? 1 : -1;
+
+        int err = dx - dy;
+
+        while (true)
+        {
+            if (x0 == x1 && y0 == y1)
+                return new Vector2Int(x0, y0);
+
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                x0 += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                y0 += sy;
+            }
+        }
+
+        return nextPosition;
     }
 
     private IEnumerator SmoothMove(Vector3 startPosition, Vector3 endPosition, float duration)

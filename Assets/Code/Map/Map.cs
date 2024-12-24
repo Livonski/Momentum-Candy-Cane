@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -113,6 +114,110 @@ public class Map : MonoBehaviour
             return null;
         }
         return _map[position.x, position.y];
+    }
+
+    public int GetDistance(Vector2Int start, Vector2Int end)
+    {
+        if (!IsInsideMap(start) || !IsInsideMap(start))
+        {
+            //throw new ArgumentException($"Start({start}) or end({end}) position is out of bounds.");
+            Debug.LogError($"Start({start}) or end({end}) position is out of bounds.");
+        }
+
+        Vector2Int[] directions =
+        {
+            new Vector2Int(1, 0),   // Right
+            new Vector2Int(-1, 0),  // Left
+            new Vector2Int(0, 1),   // Up
+            new Vector2Int(0, -1),  // Down
+            new Vector2Int(1, 1),   // Up-right
+            new Vector2Int(-1, 1),  // Up-left
+            new Vector2Int(1, -1),  // Down-right
+            new Vector2Int(-1, -1)  // Down-left
+        };
+
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        PriorityQueue<Vector2Int> priorityQueue = new PriorityQueue<Vector2Int>();
+        Dictionary<Vector2Int, int> costSoFar = new Dictionary<Vector2Int, int>();
+
+        priorityQueue.Enqueue(start, 0);
+        costSoFar[start] = 0;
+
+        while (priorityQueue.Count > 0)
+        {
+            Vector2Int current = priorityQueue.Dequeue();
+
+            if (current == end)
+            {
+                return costSoFar[current];
+            }
+
+            foreach (var direction in directions)
+            {
+                Vector2Int next = current + direction;
+
+                if (!IsPositionValid(next) || visited.Contains(next))
+                {
+                    continue;
+                }
+
+                int newCost = costSoFar[current] + 1;
+                if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                {
+                    costSoFar[next] = newCost;
+                    int priority = newCost + Heuristic(next, end);
+                    priorityQueue.Enqueue(next, priority);
+                }
+            }
+
+            visited.Add(current);
+        }
+
+        //No path found
+        return -1;
+    }
+
+    private bool IsPositionValid(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= _mapSize.x ||
+            position.y < 0 || position.y >= _mapSize.y)
+        {
+            return false;
+        }
+
+        MapObject tile = _map[position.x, position.y];
+        if (tile == null || tile._objects.Exists(obj => obj.GetComponent<IBlockable>() != null))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private int Heuristic(Vector2Int a, Vector2Int b)
+    {
+        // Use Chebyshev distance for 8-directional movement
+        return Mathf.Max(Mathf.Abs(a.x - b.x), Mathf.Abs(a.y - b.y));
+    }
+
+    private class PriorityQueue<T>
+    {
+        private List<(T Item, int Priority)> elements = new List<(T Item, int Priority)>();
+
+        public int Count => elements.Count;
+
+        public void Enqueue(T item, int priority)
+        {
+            elements.Add((item, priority));
+            elements.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+        }
+
+        public T Dequeue()
+        {
+            var bestItem = elements[0].Item;
+            elements.RemoveAt(0);
+            return bestItem;
+        }
     }
 
     private void GenerateBlankMap(Vector2Int mapSize)

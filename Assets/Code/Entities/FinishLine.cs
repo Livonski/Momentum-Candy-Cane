@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FinishLine : MonoBehaviour, ICollidable, IInitializable, IBlockable
 {
-    [SerializeField] private Vector2Int _gridPosition;
+    public Vector2Int GridPosition { get; private set; }
     public void OnInitialize(InitializationData data)
     {
-        _gridPosition = data.GridPosition;
+        GridPosition = data.GridPosition;
         transform.name = data.DefaultName + data.ID;
 
     }

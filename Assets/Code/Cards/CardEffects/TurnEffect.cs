@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TurnDirection { Left, Right }
+public enum TurnDirection { Left, Right, None }
 
 public class TurnEffect : ICardEffect
 {
